@@ -1,29 +1,96 @@
-# G5AuthenticatableApi
+# G5 Authenticatable API
 
-TODO: Write a gem description
+A set of helpers for securing Rack-based APIs using G5 Auth.
+
+## Current Version
+
+0.0.1 (unreleased)
+
+## Requirements
+
+* TODO
 
 ## Installation
 
-Add this line to your application's Gemfile:
+1. Add this line to your application's Gemfile:
 
-    gem 'g5_authenticatable_api'
+   ```ruby
+   gem 'g5_authenticatable_api'
+   ```
 
-And then execute:
+2. And then execute:
 
-    $ bundle
+   ```console
+   bundle
+   ```
 
-Or install it yourself as:
+## Configuration
 
-    $ gem install g5_authenticatable_api
+TODO
 
 ## Usage
 
-TODO: Write usage instructions here
+TODO
+
+## Examples
+
+TODO
+
+## Authors
+
+* Maeve Revels / [@maeve](https://github.com/maeve)
+* Rob Revels / [@sleverbor](https://github.com/sleverbor)
 
 ## Contributing
 
-1. Fork it ( http://github.com/<my-github-username>/g5_authenticatable_api/fork )
+1. [Fork it](https://github.com/g5search/g5_authenticatable_api/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+3. Write your code and **specs**
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
+
+If you find bugs, have feature requests or questions, please
+[file an issue](https://github.com/g5search/g5_authenticatable_api/issues).
+
+### Specs
+
+Before running the specs for the first time, you will need to initialize the
+database for the test Rails application.
+
+```console
+$ cp spec/dummy/config/database.yml.sample spec/dummy/config/database.yml
+$ (cd spec/dummy; RAILS_ENV=test bundle exec rake db:setup)
+```
+
+To execute the entire test suite:
+
+```console
+$ bundle exec rspec spec
+```
+
+## License
+
+Copyright (c) 2014 G5
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
