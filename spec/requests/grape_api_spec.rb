@@ -1,26 +1,19 @@
 require 'spec_helper'
 
 describe 'a secure Grape API endpoint' do
-  subject(:api_call) { get '/grape_api/hello' }
+  let(:endpoint) { '/grape_api/hello' }
+  let(:params) {}
+  let(:headers) {}
 
-  context 'with valid access token' do
-    it 'should be accessible' do
-      api_call
-      expect(response).to be_http_ok
-    end
+  describe 'GET request' do
+    subject(:api_call) { get endpoint, params, headers }
+
+    it_should_behave_like 'a token authenticatable api'
   end
 
-  context 'with invalid access token' do
-    it 'should be unauthorized' do
-      api_call
-      expect(response).to be_http_unauthorized
-    end
-  end
+  describe 'POST request' do
+    subject(:api_call) { post endpoint, params, headers }
 
-  context 'without authentication' do
-    it 'should be unauthorized' do
-      api_call
-      expect(response).to be_http_unauthorized
-    end
+    it_should_behave_like 'a token authenticatable api'
   end
 end
