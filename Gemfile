@@ -13,6 +13,7 @@ gemspec
 gem 'rails', '~> 4.0.2'
 gem 'jquery-rails'
 gem 'pg'
+gem 'grape'
 
 group :test, :development do
   gem 'rspec-rails', '~> 2.14'
