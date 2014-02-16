@@ -9,7 +9,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../dummy/config/environment", __FILE__)
 
 require 'rspec/rails'
-require 'rspec/autorun'
+require 'rspec/http'
 require 'capybara/rspec'
 require 'webmock/rspec'
 
