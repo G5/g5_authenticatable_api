@@ -2,13 +2,20 @@
 
 A set of helpers for securing Rack-based APIs using G5 Auth.
 
+The helpers can be used in conjunction with [warden](https://github.com/hassox/warden)
+(and therefore, [devise](https://github.com/plataformatec/devise)) to protect
+an API for a website (e.g. an [ember](http://emberjs.com) application). Or
+they may be used to protect a stand-alone service using token-based authentication
+as described by the [OAuth 2.0 Bearer Token](http://tools.ietf.org/html/rfc6750)
+specification.
+
 ## Current Version
 
 0.0.1 (unreleased)
 
 ## Requirements
 
-* TODO
+* rack
 
 ## Installation
 
