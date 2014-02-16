@@ -8,8 +8,6 @@ shared_examples_for 'token validation' do
     it 'should be successful' do
       expect(response).to be_success
     end
-
-    it 'should have the correct authenticate header'
   end
 
   context 'when token is invalid' do
@@ -21,7 +19,17 @@ shared_examples_for 'token validation' do
       expect(response).to be_http_unauthorized
     end
 
-    it 'should have the correct authenticate header'
+    it 'should return an authenticate header' do
+      expect(response.headers).to have_key('WWW-Authenticate')
+    end
+
+    it 'should return the authentication error' do
+      expect(response.headers['WWW-Authenticate']).to match('error="invalid_token"')
+    end
+
+    it 'should return the authentication error description' do
+      expect(response.headers['WWW-Authenticate']).to match('error_description="The access token has expired"')
+    end
   end
 end
 
@@ -38,5 +46,17 @@ shared_examples_for 'a token authenticatable api' do
     let(:params) { {'access_token' => access_token} }
 
     include_examples 'token validation'
+  end
+
+  context 'without authentication information' do
+    before { subject }
+
+    it 'should be unauthorized' do
+      expect(response).to be_http_unauthorized
+    end
+
+    it 'should return an authenticate header without details' do
+      expect(response.headers).to include('WWW-Authenticate' => 'Bearer')
+    end
   end
 end
