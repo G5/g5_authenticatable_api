@@ -8,12 +8,14 @@ describe 'a secure Grape API endpoint' do
   describe 'GET request' do
     subject(:api_call) { get endpoint, params, headers }
 
+    it_should_behave_like 'a warden authenticatable api'
     it_should_behave_like 'a token authenticatable api'
   end
 
   describe 'POST request' do
     subject(:api_call) { post endpoint, params, headers }
 
+    it_should_behave_like 'a warden authenticatable api'
     it_should_behave_like 'a token authenticatable api'
   end
 end
