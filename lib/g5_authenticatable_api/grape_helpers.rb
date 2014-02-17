@@ -2,12 +2,7 @@ module G5AuthenticatableApi
   module GrapeHelpers
     def authenticate_user!
       if access_token
-        begin
-          g5_auth_client.token_info
-        rescue OAuth2::Error => error
-          throw :error, status: 401,
-                        headers: {'WWW-Authenticate' => authenticate_header(error)}
-        end
+        validate_access_token
       else
         throw :error, status: 401,
                       headers: {'WWW-Authenticate' => authenticate_header}
@@ -28,6 +23,15 @@ module G5AuthenticatableApi
     end
 
     private
+    def validate_access_token
+      begin
+        g5_auth_client.token_info
+      rescue OAuth2::Error => error
+        throw :error, status: 401,
+                      headers: {'WWW-Authenticate' => authenticate_header(error)}
+      end
+    end
+
     def authenticate_header(error=nil)
       auth_header = "Bearer"
 
