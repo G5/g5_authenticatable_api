@@ -1,11 +1,13 @@
 module G5AuthenticatableApi
   module GrapeHelpers
     def authenticate_user!
-      if access_token
-        validate_access_token
-      else
-        throw :error, status: 401,
-                      headers: {'WWW-Authenticate' => authenticate_header}
+      unless warden.try(:authenticated?)
+        if access_token
+          validate_access_token
+        else
+          throw :error, status: 401,
+                        headers: {'WWW-Authenticate' => authenticate_header}
+        end
       end
     end
 
@@ -20,6 +22,10 @@ module G5AuthenticatableApi
 
     def g5_auth_client
       G5AuthenticationClient::Client.new(access_token: access_token)
+    end
+
+    def warden
+      env['warden']
     end
 
     private

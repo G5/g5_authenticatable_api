@@ -5,8 +5,7 @@ shared_examples_for 'a warden authenticatable api' do
     let(:user) { create(:user) }
 
     before do
-      stub_g5_omniauth(user)
-      get '/users/sign_in'
+      login_as(user, scope: :user)
       subject
     end
 
@@ -16,7 +15,10 @@ shared_examples_for 'a warden authenticatable api' do
   end
 
   context 'when user is not authenticated' do
-    before { subject }
+    before do
+     logout
+     subject
+    end
 
     it 'should be unauthorized' do
       expect(response).to be_http_unauthorized
