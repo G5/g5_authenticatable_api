@@ -1,9 +1,6 @@
 source 'https://rubygems.org'
 source "https://#{ENV['GEMFURY_TOKEN']}@gem.fury.io/me/"
 
-# We want to load this before all of the other gems
-gem 'dotenv-rails'
-
 # Declare your gem's dependencies in g5_authenticatable_api.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
