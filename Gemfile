@@ -33,7 +33,7 @@ end
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
-gem 'g5_authentication_client', git: 'git@github.com:g5search/g5_authentication_client.git', branch: 'token_info'
+gem 'g5_authentication_client', git: 'git@github.com:g5search/g5_authentication_client.git', branch: 'master'
 
 # To use debugger
 # gem 'debugger'
