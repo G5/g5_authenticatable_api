@@ -33,7 +33,22 @@ specification.
 
 ## Configuration
 
-TODO
+The API helpers need to know the endpoint for the G5 auth server to use when
+validating tokens. This may be configured in one of several ways:
+
+* Set the `G5_AUTH_ENDPOINT` environment variable (typically to either
+   https://dev-auth.g5search.com or https://auth.g5search.com).
+
+**OR**
+
+* Configure the `G5AuthenticationClient` module directly, perhaps in an
+  initializer:
+
+  ```ruby
+  G5AuthenticationClient.configure do |config|
+    config.endpoint = 'https://dev-auth.g5search.com'
+  end
+  ```
 
 ## Usage
 
