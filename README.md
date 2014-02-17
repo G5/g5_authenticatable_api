@@ -37,7 +37,37 @@ TODO
 
 ## Usage
 
-TODO
+### Grape
+
+To require authentication for all endpoints exposed by your API:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  before { authenticate_user! }
+
+  # ...
+end
+```
+
+To selectively require authentication for some endpoints but not
+others:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  get :secure do
+    authenticate_user!
+    { secure: 'data' }
+  end
+
+  get :open do
+    { hello: 'world' }
+  end
+end
+```
 
 ## Examples
 
