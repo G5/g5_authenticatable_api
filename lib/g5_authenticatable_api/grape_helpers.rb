@@ -5,7 +5,8 @@ module G5AuthenticatableApi
         if access_token
           validate_access_token
         else
-          throw :error, status: 401,
+          throw :error, message: 'Unauthorized',
+                        status: 401,
                         headers: {'WWW-Authenticate' => authenticate_header}
         end
       end
@@ -33,7 +34,8 @@ module G5AuthenticatableApi
       begin
         g5_auth_client.token_info
       rescue OAuth2::Error => error
-        throw :error, status: 401,
+        throw :error, message: 'Unauthorized',
+                      status: 401,
                       headers: {'WWW-Authenticate' => authenticate_header(error)}
       end
     end
