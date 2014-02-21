@@ -2,13 +2,20 @@
 
 A set of helpers for securing Rack-based APIs using G5 Auth.
 
+The helpers can be used in conjunction with [warden](https://github.com/hassox/warden)
+(and therefore, [devise](https://github.com/plataformatec/devise)) to protect
+an API for a website (e.g. an [ember](http://emberjs.com) application). Or
+they may be used to protect a stand-alone service using token-based authentication
+as described by the [OAuth 2.0 Bearer Token](http://tools.ietf.org/html/rfc6750)
+specification.
+
 ## Current Version
 
 0.0.1 (unreleased)
 
 ## Requirements
 
-* TODO
+* rack
 
 ## Installation
 
@@ -26,11 +33,56 @@ A set of helpers for securing Rack-based APIs using G5 Auth.
 
 ## Configuration
 
-TODO
+The API helpers need to know the endpoint for the G5 auth server to use when
+validating tokens. This may be configured in one of several ways:
+
+* Set the `G5_AUTH_ENDPOINT` environment variable (typically to either
+   https://dev-auth.g5search.com or https://auth.g5search.com).
+
+**OR**
+
+* Configure the `G5AuthenticationClient` module directly, perhaps in an
+  initializer:
+
+  ```ruby
+  G5AuthenticationClient.configure do |config|
+    config.endpoint = 'https://dev-auth.g5search.com'
+  end
+  ```
 
 ## Usage
 
-TODO
+### Grape
+
+To require authentication for all endpoints exposed by your API:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  before { authenticate_user! }
+
+  # ...
+end
+```
+
+To selectively require authentication for some endpoints but not
+others:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  get :secure do
+    authenticate_user!
+    { secure: 'data' }
+  end
+
+  get :open do
+    { hello: 'world' }
+  end
+end
+```
 
 ## Examples
 
