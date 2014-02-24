@@ -4,7 +4,9 @@ describe 'A Secure Rails API endpoint' do
   let(:params) {}
   let(:headers) {}
 
-  describe 'GET articles index' do
+  describe 'GET request' do
+    before { pending }
+
     subject(:api_call) { get '/rails_api/articles', params, headers }
 
     it_should_behave_like 'a warden authenticatable api'
