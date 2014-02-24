@@ -1,3 +1,5 @@
+require 'g5_authenticatable_api/token_validator'
+
 module G5AuthenticatableApi
   module GrapeHelpers
     def authenticate_user!
@@ -21,10 +23,6 @@ module G5AuthenticatableApi
       end
     end
 
-    def g5_auth_client
-      G5AuthenticationClient::Client.new(access_token: access_token)
-    end
-
     def warden
       env['warden']
     end
@@ -32,7 +30,7 @@ module G5AuthenticatableApi
     private
     def validate_access_token
       begin
-        g5_auth_client.token_info
+        TokenValidator.new(access_token).validate_token!
       rescue OAuth2::Error => error
         throw :error, message: 'Unauthorized',
                       status: 401,
