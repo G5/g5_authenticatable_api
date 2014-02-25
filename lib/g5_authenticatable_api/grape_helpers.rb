@@ -4,7 +4,7 @@ module G5AuthenticatableApi
   module GrapeHelpers
     def authenticate_user!
       unless warden.try(:authenticated?)
-        if access_token
+        if token_validator.access_token
           validate_access_token
         else
           throw :error, message: 'Unauthorized',
@@ -14,23 +14,19 @@ module G5AuthenticatableApi
       end
     end
 
-    def access_token
-      @access_token ||= if env['HTTP_AUTHORIZATION']
-        parts = env['HTTP_AUTHORIZATION'].match(/Bearer (?<access_token>\S+)/)
-        parts['access_token']
-      else
-        Rack::Request.new(env).params['access_token']
-      end
-    end
-
     def warden
       env['warden']
     end
 
     private
+    def token_validator
+      request = Rack::Request.new(env)
+      @token_validator ||= TokenValidator.new(request.params, headers)
+    end
+
     def validate_access_token
       begin
-        TokenValidator.new(access_token).validate_token!
+        token_validator.validate_token!
       rescue OAuth2::Error => error
         throw :error, message: 'Unauthorized',
                       status: 401,
