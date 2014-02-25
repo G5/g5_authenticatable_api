@@ -9,6 +9,15 @@ module G5AuthenticatableApi
       auth_client.token_info
     end
 
+    def valid?
+      begin
+        validate_token!
+        true
+      rescue StandardError => e
+        false
+      end
+    end
+
     def access_token
       @access_token ||= if @headers['Authorization']
         parts = @headers['Authorization'].match(/Bearer (?<access_token>\S+)/)
