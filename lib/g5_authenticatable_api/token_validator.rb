@@ -7,7 +7,7 @@ module G5AuthenticatableApi
       @headers = headers || {}
     end
 
-    def validate_token!
+    def validate!
       begin
         auth_client.token_info
       rescue StandardError => @error
@@ -17,7 +17,7 @@ module G5AuthenticatableApi
 
     def valid?
       begin
-        validate_token!
+        validate!
         true
       rescue StandardError => e
         false

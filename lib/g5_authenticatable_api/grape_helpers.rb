@@ -25,12 +25,10 @@ module G5AuthenticatableApi
     end
 
     def validate_access_token
-      begin
-        token_validator.validate_token!
-      rescue OAuth2::Error => error
+      unless token_validator.valid?
         throw :error, message: 'Unauthorized',
                       status: 401,
-                      headers: {'WWW-Authenticate' => authenticate_response_header(error)}
+                      headers: {'WWW-Authenticate' => authenticate_response_header(token_validator.error)}
       end
     end
 

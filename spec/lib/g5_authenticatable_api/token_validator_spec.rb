@@ -31,8 +31,8 @@ describe G5AuthenticatableApi::TokenValidator do
     end
   end
 
-  describe '#validate_token!' do
-    subject(:validate_token!) { validator.validate_token! }
+  describe '#validate!' do
+    subject(:validate!) { validator.validate! }
 
     context 'when token is valid' do
       include_context 'valid access token'
@@ -44,11 +44,11 @@ describe G5AuthenticatableApi::TokenValidator do
       end
 
       it 'should not raise errors during validation' do
-        expect { validate_token! }.to_not raise_error
+        expect { validate! }.to_not raise_error
       end
 
       it 'should not set an error on the validator' do
-        validate_token!
+        validate!
         expect(validator.error).to be_nil
       end
     end
@@ -63,12 +63,12 @@ describe G5AuthenticatableApi::TokenValidator do
       end
 
       it 'should re-raise the OAuth error' do
-        expect { validate_token! }.to raise_error(OAuth2::Error)
+        expect { validate! }.to raise_error(OAuth2::Error)
       end
 
       it 'should set the error on the validator' do
         begin
-          validate_token!
+          validate!
         rescue StandardError => validation_error
           expect(validator.error).to eq(validation_error)
         end
@@ -80,12 +80,12 @@ describe G5AuthenticatableApi::TokenValidator do
       let(:headers) {}
 
       it 'should raise an error' do
-        expect { validate_token! }.to raise_error(RuntimeError)
+        expect { validate! }.to raise_error(RuntimeError)
       end
 
       it 'should set an error on the validator' do
         begin
-          validate_token!
+          validate!
         rescue RuntimeError => validation_error
           expect(validator.error).to eq(validation_error)
         end
