@@ -9,7 +9,7 @@ module G5AuthenticatableApi
         else
           throw :error, message: 'Unauthorized',
                         status: 401,
-                        headers: {'WWW-Authenticate' => authenticate_header}
+                        headers: {'WWW-Authenticate' => authenticate_response_header}
         end
       end
     end
@@ -30,11 +30,11 @@ module G5AuthenticatableApi
       rescue OAuth2::Error => error
         throw :error, message: 'Unauthorized',
                       status: 401,
-                      headers: {'WWW-Authenticate' => authenticate_header(error)}
+                      headers: {'WWW-Authenticate' => authenticate_response_header(error)}
       end
     end
 
-    def authenticate_header(error=nil)
+    def authenticate_response_header(error=nil)
       auth_header = "Bearer"
 
       if error
