@@ -38,13 +38,8 @@ module G5AuthenticatableApi
         auth_header = "Bearer"
 
         if access_token
-          error_code = error.code if error.respond_to?(:code)
-          error_code ||= 'invalid_request'
           auth_header << " error=\"#{error_code}\""
-
-          if error.respond_to?(:description) && error.description
-            auth_header << ",error_description=\"#{error.description}\""
-          end
+          auth_header << ",error_description=\"#{error_description}\"" if error_description
         end
 
         auth_header
@@ -53,6 +48,17 @@ module G5AuthenticatableApi
 
     def auth_client
       @auth_client ||= G5AuthenticationClient::Client.new(access_token: access_token)
+    end
+
+    private
+    def error_code
+      error_code = error.code if error.respond_to?(:code)
+      error_code || 'invalid_request'
+    end
+
+    def error_description
+      error_description = error.description if error.respond_to?(:description)
+      error_description
     end
   end
 end
