@@ -1,12 +1,18 @@
 module G5AuthenticatableApi
   class TokenValidator
+    attr_reader :error
+
     def initialize(params={},headers={})
       @params = params || {}
       @headers = headers || {}
     end
 
     def validate_token!
-      auth_client.token_info
+      begin
+        auth_client.token_info
+      rescue StandardError => @error
+        raise error
+      end
     end
 
     def valid?

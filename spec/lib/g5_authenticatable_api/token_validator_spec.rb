@@ -39,11 +39,17 @@ describe G5AuthenticatableApi::TokenValidator do
 
       it 'should initialize the auth client with the access token' do
         validator.auth_client
-        expect(G5AuthenticationClient::Client).to have_received(:new).with(access_token: token_value)
+        expect(G5AuthenticationClient::Client).to have_received(:new).
+          with(access_token: token_value)
       end
 
       it 'should not raise errors during validation' do
         expect { validate_token! }.to_not raise_error
+      end
+
+      it 'should not set an error on the validator' do
+        validate_token!
+        expect(validator.error).to be_nil
       end
     end
 
@@ -52,11 +58,20 @@ describe G5AuthenticatableApi::TokenValidator do
 
       it 'should initialize the auth client with the access token' do
         validator.auth_client
-        expect(G5AuthenticationClient::Client).to have_received(:new).with(access_token: token_value)
+        expect(G5AuthenticationClient::Client).to have_received(:new).
+          with(access_token: token_value)
       end
 
       it 'should re-raise the OAuth error' do
         expect { validate_token! }.to raise_error(OAuth2::Error)
+      end
+
+      it 'should set the error on the validator' do
+        begin
+          validate_token!
+        rescue StandardError => validation_error
+          expect(validator.error).to eq(validation_error)
+        end
       end
     end
 
@@ -65,7 +80,15 @@ describe G5AuthenticatableApi::TokenValidator do
       let(:headers) {}
 
       it 'should raise an error' do
-        expect { validate_token! }.to raise_error
+        expect { validate_token! }.to raise_error(RuntimeError)
+      end
+
+      it 'should set an error on the validator' do
+        begin
+          validate_token!
+        rescue RuntimeError => validation_error
+          expect(validator.error).to eq(validation_error)
+        end
       end
     end
   end
@@ -79,6 +102,11 @@ describe G5AuthenticatableApi::TokenValidator do
       it 'should be valid' do
         expect(validator).to be_valid
       end
+
+      it 'should not set an error on the validator' do
+        valid?
+        expect(validator.error).to be_nil
+      end
     end
 
     context 'when token is invalid' do
@@ -86,6 +114,11 @@ describe G5AuthenticatableApi::TokenValidator do
 
       it 'should not be valid' do
         expect(validator).to_not be_valid
+      end
+
+      it 'should set an error on the validator' do
+        expect { valid? }.to change { validator.error }.
+          from(nil).to(oauth_error)
       end
     end
 
@@ -95,6 +128,11 @@ describe G5AuthenticatableApi::TokenValidator do
 
       it 'should not be valid' do
         expect(validator).to_not be_valid
+      end
+
+      it 'should set an error on the validator' do
+        expect { valid? }.to change { validator.error }.
+          from(nil).to(an_instance_of(RuntimeError))
       end
     end
   end
