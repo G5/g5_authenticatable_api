@@ -33,6 +33,24 @@ module G5AuthenticatableApi
       end
     end
 
+    def auth_response_header
+      if error
+        auth_header = "Bearer"
+
+        if access_token
+          error_code = error.code if error.respond_to?(:code)
+          error_code ||= 'invalid_request'
+          auth_header << " error=\"#{error_code}\""
+
+          if error.respond_to?(:description) && error.description
+            auth_header << ",error_description=\"#{error.description}\""
+          end
+        end
+
+        auth_header
+      end
+    end
+
     def auth_client
       @auth_client ||= G5AuthenticationClient::Client.new(access_token: access_token)
     end

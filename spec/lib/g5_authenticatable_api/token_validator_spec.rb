@@ -136,4 +136,71 @@ describe G5AuthenticatableApi::TokenValidator do
       end
     end
   end
+
+  describe '#auth_response_header' do
+    subject(:auth_response_header) { validator.auth_response_header }
+
+    let(:header_parts) { auth_response_header.match(auth_header_regex) }
+
+    context 'with invalid token error' do
+      include_context 'invalid access token'
+      before { validator.valid? }
+
+      let(:auth_header_regex) do
+        /Bearer error="(?<error>.+)",error_description="(?<error_description>.*)"/
+      end
+
+      it 'should be in the expected format' do
+        expect(auth_response_header).to match(auth_header_regex)
+      end
+
+      it 'should have the correct error code' do
+        expect(header_parts['error']).to eq(error_code)
+      end
+
+      it 'should have the correct error description' do
+        expect(header_parts['error_description']).to eq(error_description)
+      end
+    end
+
+    context 'with generic auth server error' do
+      include_context 'OAuth2 error'
+      before { validator.valid? }
+
+      let(:auth_header_regex) do
+        /Bearer error="(?<error>.+)"/
+      end
+
+      it 'should be in the expected format' do
+        expect(auth_response_header).to match(auth_header_regex)
+      end
+
+      it 'should have the default error code' do
+        expect(header_parts['error']).to eq('invalid_request')
+      end
+
+      it 'should not have an error description' do
+        expect(auth_response_header).to_not match(/error_description/)
+      end
+    end
+
+    context 'without token' do
+      let(:params) {}
+      let(:headers) {}
+      before { validator.valid? }
+
+      it 'should not include any error data' do
+        expect(auth_response_header).to eq('Bearer')
+      end
+    end
+
+    context 'with valid token' do
+      include_context 'valid access token'
+      before { validator.valid? }
+
+      it 'should be nil' do
+        expect(auth_response_header).to be_nil
+      end
+    end
+  end
 end
