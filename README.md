@@ -4,10 +4,8 @@ A set of helpers for securing Rails or Grape APIs using G5 Auth.
 
 The helpers can be used in conjunction with
 [devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
-to protect an API for a website (e.g. an [ember](http://emberjs.com)
-application). Or they may be used to protect a stand-alone service using
-token-based authentication as described by the
-[OAuth 2.0 Bearer Token](http://tools.ietf.org/html/rfc6750) specification.
+to protect an API for a website, or they may be used to protect a stand-alone
+service using token-based authentication.
 
 ## Current Version
 
@@ -112,6 +110,62 @@ class MyApi < Grape::API
     { hello: 'world' }
   end
 end
+```
+
+### Submitting a token
+
+Authenticated requests follow the requirements described by
+[OAuth 2.0 Bearer Token specification](http://tools.ietf.org/html/rfc6750#section-2).
+If you are relying on token-based authentication for your API, there are three
+ways that an OAuth access token may be submitted as part of a request:
+
+* In the `Authorization` HTTP header, with the format "Bearer \<access_token\>"
+
+  ```http
+  GET /resource HTTP/1.1
+  Host: server.example.com
+  Authorization: Bearer mF_9.B5f-4.1JqM
+  ```
+
+* As the value of the `access_token` form-encoded body parameter:
+
+  ```http
+  POST /resource HTTP/1.1
+  Host: server.example.com
+  Content-Type: application/x-www-form-urlencoded
+
+  access_token=mF_9.B5f-4.1JqM
+  ```
+
+* As the value of the `access_token` query URI parameter:
+
+  ```http
+  GET /resource?access_token=mF_9.B5f-4.1JqM HTTP/1.1
+  Host: server.example.com
+  ```
+
+### Unauthorized response
+
+If there is no logged in user and token authentication fails, secure API methods
+will return a response with an HTTP status of 401. More detailed information will
+be available in the `WWW-Authenticate` response header, as described in the
+[OAuth 2.0 Bearer Token specification](http://tools.ietf.org/html/rfc6750#section-3).
+
+In brief, `WWW-Authenticate` header will contain one of the following error codes
+when token validation fails against G5 Auth:
+
+* `invalid_request` (the default)
+* `invalid_token`
+* `insufficent_scope`
+
+The header may also have an error description if one is available. For
+example:
+
+```http
+HTTP/1.1 401 Unauthorized
+     WWW-Authenticate: Bearer realm="example",
+                       error="invalid_token",
+                       error_description="The access token expired"
 ```
 
 ## Examples
