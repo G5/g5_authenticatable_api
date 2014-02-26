@@ -188,7 +188,7 @@ Then protect the API that ember talks to:
 
 ```ruby
 class MyApi < Grape::API
-  helpers G5AuthenticatableApi::GrapeHelpers
+  helpers G5AuthenticatableApi::Helpers::Grape
 
   before { authenticate_user! }
 
