@@ -1,13 +1,13 @@
 # G5 Authenticatable API
 
-A set of helpers for securing Rack-based APIs using G5 Auth.
+A set of helpers for securing Rails or Grape APIs using G5 Auth.
 
-The helpers can be used in conjunction with [warden](https://github.com/hassox/warden)
-(and therefore, [devise](https://github.com/plataformatec/devise)) to protect
-an API for a website (e.g. an [ember](http://emberjs.com) application). Or
-they may be used to protect a stand-alone service using token-based authentication
-as described by the [OAuth 2.0 Bearer Token](http://tools.ietf.org/html/rfc6750)
-specification.
+The helpers can be used in conjunction with
+[devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
+to protect an API for a website (e.g. an [ember](http://emberjs.com)
+application). Or they may be used to protect a stand-alone service using
+token-based authentication as described by the
+[OAuth 2.0 Bearer Token](http://tools.ietf.org/html/rfc6750) specification.
 
 ## Current Version
 
@@ -15,7 +15,11 @@ specification.
 
 ## Requirements
 
-* rack
+* [rails](http://rubyonrails.org/) >= 3.2
+
+**OR**
+
+* [grape](https://github.com/intridea/grape)
 
 ## Installation
 
@@ -52,6 +56,32 @@ validating tokens. This may be configured in one of several ways:
 
 ## Usage
 
+### Rails
+
+To require authentication for all API actions:
+
+```ruby
+class MyResourceController < ApplicationController
+  before_filter :authenticate_api_user!
+
+  respond_to :json
+
+  # ...
+end
+```
+
+To require authentication for some API actions:
+
+```ruby
+class MyResourceController < ApplicationController
+  before_filter :authenticate_api_user!, only: [:create, :update]
+
+  respond_to :json
+
+  # ...
+end
+```
+
 ### Grape
 
 To require authentication for all endpoints exposed by your API:
@@ -86,7 +116,61 @@ end
 
 ## Examples
 
-TODO
+### Securing an Ember application backed by a Grape API
+
+Use devise to protect the controller action that serves your ember
+application:
+
+```ruby
+class WelcomeController < ApplicationController
+  before_filter :authenticate_user!
+
+  def index
+  end
+end
+```
+
+Then protect the API that ember talks to:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  before { authenticate_user! }
+
+  # Your API endpoints ...
+end
+```
+
+That's it! No client-side changes are necessary.
+
+### Token-based authentication for a Rails API
+
+Protect your API actions in your controller:
+
+```ruby
+class Api::MyResourcesController < ApplicationController
+  before_filter :authenticate_api_user!
+
+  respond_to :json
+
+  def show
+    # ...
+  end
+end
+```
+
+To include the token in the authorization header:
+
+```console
+curl --header "Authorization: Bearer this-is-where-my-token-goes" https://myhost/api/my_resources/42
+```
+
+To include the token as a param:
+
+```console
+curl https://myhost/api/my_resources/42?access_token=this-is-where-my-token-goes
+```
 
 ## Authors
 
