@@ -1,43 +1,20 @@
 shared_examples_for 'token validation' do
-  let(:g5_auth_client) { double(:g5_authentication_client) }
-  before do
-    allow(G5AuthenticationClient::Client).to receive(:new).and_return(g5_auth_client)
-  end
-
   context 'when token is valid' do
-    let(:auth_user) { double(:auth_user, email: 'auth.user@test.host',
-                                         id: 'user-uid-42') }
-    before { allow(g5_auth_client).to receive(:me).and_return(auth_user) }
-
-
-    let(:token_info) { double(:token_info, resource_owner_id: 'user-uid-42',
-                                           expires_in_seconds: 3600,
-                                           application_uid: 'application-uid-42',
-                                           scopes: []) }
-    before { allow(g5_auth_client).to receive(:token_info).and_return(token_info) }
+    include_context 'valid access token'
 
     before { subject }
 
     it 'should be successful' do
       expect(response).to be_success
     end
+
+    it 'should initialize the client with the correct token' do
+      expect(G5AuthenticationClient::Client).to have_received(:new).with(access_token: access_token)
+    end
   end
 
   context 'when token is invalid' do
-    let(:oauth_error) { OAuth2::Error.new(oauth_response) }
-    let(:oauth_response) do
-      double(:oauth_response,
-             parsed: {'error' => error_code,
-                      'error_description' => error_description}).as_null_object
-    end
-
-    let(:error_code) { 'invalid_token' }
-    let(:error_description) { 'The access token expired' }
-
-    before do
-      allow(g5_auth_client).to receive(:me).and_raise(oauth_error)
-      allow(g5_auth_client).to receive(:token_info).and_raise(oauth_error)
-    end
+    include_context 'invalid access token'
 
     before { subject }
 
@@ -59,13 +36,7 @@ shared_examples_for 'token validation' do
   end
 
   context 'when some other oauth error occurs' do
-    let(:oauth_error) { OAuth2::Error.new(oauth_response) }
-    let(:oauth_response) { double(:oauth_response, parsed: '').as_null_object }
-
-    before do
-      allow(g5_auth_client).to receive(:me).and_raise(oauth_error)
-      allow(g5_auth_client).to receive(:token_info).and_raise(oauth_error)
-    end
+    include_context 'OAuth2 error'
 
     before { subject }
 

@@ -1,5 +1,5 @@
 class HelloAPI < Grape::API
-  helpers G5AuthenticatableApi::GrapeHelpers
+  helpers G5AuthenticatableApi::Helpers::Grape
 
   before { authenticate_user! }
 

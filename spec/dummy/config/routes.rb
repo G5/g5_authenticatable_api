@@ -1,4 +1,8 @@
 Dummy::Application.routes.draw do
+  namespace :rails_api do
+    resources :articles, only: :index, defaults: {format: 'json'}
+  end
+
   devise_for :users
   mount HelloAPI => '/grape_api'
 
