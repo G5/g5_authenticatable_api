@@ -86,7 +86,7 @@ To require authentication for all endpoints exposed by your API:
 
 ```ruby
 class MyApi < Grape::API
-  helpers G5AuthenticatableApi::GrapeHelpers
+  helpers G5AuthenticatableApi::Helpers::Grape
 
   before { authenticate_user! }
 
@@ -99,7 +99,7 @@ others:
 
 ```ruby
 class MyApi < Grape::API
-  helpers G5AuthenticatableApi::GrapeHelpers
+  helpers G5AuthenticatableApi::Helpers::Grape
 
   get :secure do
     authenticate_user!
