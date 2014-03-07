@@ -1,3 +1,8 @@
+## v0.1.1 (2014-03-07)
+
+* Bug fix: ignore any configured resource owner password credentials during
+  token validation.
+
 ## v0.1.0 (2014-02-26)
 
 * Implement Rails API helpers
