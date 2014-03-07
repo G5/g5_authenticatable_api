@@ -47,7 +47,8 @@ module G5AuthenticatableApi
     end
 
     def auth_client
-      @auth_client ||= G5AuthenticationClient::Client.new(access_token: access_token)
+      @auth_client ||= G5AuthenticationClient::Client.new(allow_password_credentials: 'false',
+                                                          access_token: access_token)
     end
 
     private
