@@ -38,9 +38,9 @@ describe G5AuthenticatableApi::TokenValidator do
       include_context 'valid access token'
 
       it 'should initialize the auth client with the access token' do
-        validator.auth_client
-        expect(G5AuthenticationClient::Client).to have_received(:new).
-          with(access_token: token_value)
+        validate!
+        expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
+               with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
       end
 
       it 'should not raise errors during validation' do
@@ -55,12 +55,6 @@ describe G5AuthenticatableApi::TokenValidator do
 
     context 'when token is invalid' do
       include_context 'invalid access token'
-
-      it 'should initialize the auth client with the access token' do
-        validator.auth_client
-        expect(G5AuthenticationClient::Client).to have_received(:new).
-          with(access_token: token_value)
-      end
 
       it 'should re-raise the OAuth error' do
         expect { validate! }.to raise_error(OAuth2::Error)
@@ -117,8 +111,7 @@ describe G5AuthenticatableApi::TokenValidator do
       end
 
       it 'should set an error on the validator' do
-        expect { valid? }.to change { validator.error }.
-          from(nil).to(oauth_error)
+        expect { valid? }.to change { validator.error }.from(nil).to(an_instance_of(OAuth2::Error))
       end
     end
 

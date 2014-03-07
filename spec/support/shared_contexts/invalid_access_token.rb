@@ -1,18 +1,14 @@
 shared_context 'OAuth2 error' do
-  let(:auth_client) { double(:g5_authentication_client) }
   before do
-    allow(G5AuthenticationClient::Client).to receive(:new).and_return(auth_client)
+    stub_request(:get, 'auth.g5search.com/oauth/token/info').
+      with(headers: {'Authorization'=>"Bearer #{token_value}"}).
+      to_return(status: 401,
+                headers: {'Content-Type' => 'application/json; charset=utf-8',
+                          'Cache-Control' => 'no-cache'},
+                body: parsed_error.to_json)
   end
-
-  let(:oauth_error) { OAuth2::Error.new(oauth_response) }
-  let(:oauth_response) { double(:oauth_response, parsed: parsed_error).as_null_object }
 
   let(:parsed_error) { '' }
-
-  before do
-    allow(auth_client).to receive(:me).and_raise(oauth_error)
-    allow(auth_client).to receive(:token_info).and_raise(oauth_error)
-  end
 end
 
 shared_context 'invalid access token' do

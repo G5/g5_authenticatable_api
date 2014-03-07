@@ -8,8 +8,9 @@ shared_examples_for 'token validation' do
       expect(response).to be_success
     end
 
-    it 'should initialize the client with the correct token' do
-      expect(G5AuthenticationClient::Client).to have_received(:new).with(access_token: access_token)
+    it 'should validate the access token against the auth server' do
+      expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
+             with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
     end
   end
 
@@ -55,16 +56,16 @@ shared_examples_for 'token validation' do
 end
 
 shared_examples_for 'a token authenticatable api' do
-  let(:access_token) { 'abc123' }
+  let(:token_value) { 'abc123' }
 
   context 'with authorization header' do
-    let(:headers) { {'Authorization' => "Bearer #{access_token}"} }
+    let(:headers) { {'Authorization' => "Bearer #{token_value}"} }
 
     include_examples 'token validation'
   end
 
   context 'with access token parameter' do
-    let(:params) { {'access_token' => access_token} }
+    let(:params) { {'access_token' => token_value} }
 
     include_examples 'token validation'
   end
