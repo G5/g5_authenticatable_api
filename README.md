@@ -3,7 +3,7 @@
 A set of helpers for securing Rails or Grape APIs using G5 Auth.
 
 The helpers can be used in conjunction with
-[devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
+[devise_g5_authenticatable](https://github.com/G5/devise_g5_authenticatable)
 to protect an API for a website, or they may be used to protect a stand-alone
 service using token-based authentication.
 
@@ -233,7 +233,7 @@ curl https://myhost/api/my_resources/42?access_token=this-is-where-my-token-goes
 
 ## Contributing
 
-1. [Fork it](https://github.com/g5search/g5_authenticatable_api/fork)
+1. [Fork it](https://github.com/G5/g5_authenticatable_api/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Write your code and **specs**
 4. Commit your changes (`git commit -am 'Add some feature'`)
@@ -241,7 +241,7 @@ curl https://myhost/api/my_resources/42?access_token=this-is-where-my-token-goes
 6. Create a new Pull Request
 
 If you find bugs, have feature requests or questions, please
-[file an issue](https://github.com/g5search/g5_authenticatable_api/issues).
+[file an issue](https://github.com/G5/g5_authenticatable_api/issues).
 
 ### Specs
 
