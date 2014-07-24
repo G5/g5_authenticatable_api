@@ -24,7 +24,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
   gem 'webmock'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.6'
   gem 'rspec-http', require: false
 end
 
