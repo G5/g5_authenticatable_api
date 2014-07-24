@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Gems used by the dummy application
-gem 'rails', '~> 4.0.2'
+gem 'rails', '4.1.4'
 gem 'jquery-rails'
 gem 'pg'
 gem 'grape'
