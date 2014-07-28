@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Gems used by the dummy application
-gem 'rails', '~> 4.0.2'
+gem 'rails', '4.1.4'
 gem 'jquery-rails'
 gem 'pg'
 gem 'grape'
@@ -24,7 +24,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
   gem 'webmock'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.6'
   gem 'rspec-http', require: false
 end
 
