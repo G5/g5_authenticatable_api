@@ -4,7 +4,7 @@ module G5AuthenticatableApi
   module Helpers
     module Rails
       def authenticate_api_user!
-        raise_auth_error if !(warden.try(:authenticated?) || token_validator.valid?)
+        raise_auth_error if !token_validator.valid?
       end
 
       def warden
@@ -13,7 +13,7 @@ module G5AuthenticatableApi
 
       private
       def token_validator
-        @token_validator ||= TokenValidator.new(request.params, request.headers)
+        @token_validator ||= TokenValidator.new(request.params, request.headers, warden)
       end
 
       def raise_auth_error

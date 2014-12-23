@@ -3,11 +3,12 @@ require 'spec_helper'
 describe G5AuthenticatableApi::TokenValidator do
   subject { validator }
 
-  let(:validator) { described_class.new(params, headers) }
+  let(:validator) { described_class.new(params, headers, warden) }
 
   let(:headers) {}
   let(:params) { {'access_token' => token_value} }
   let(:token_value) { 'abc123' }
+  let(:warden) {}
 
   describe '#access_token' do
     subject(:access_token) { validator.access_token }
@@ -27,6 +28,15 @@ describe G5AuthenticatableApi::TokenValidator do
 
       it 'should extract the token value from the access_token parameter' do
         expect(access_token).to eq(token_value)
+      end
+    end
+
+    context 'with warden user' do
+      let(:warden) { double(:warden, user: user) }
+      let(:user) { FactoryGirl.build_stubbed(:user) }
+
+      it 'should extract the token value from the session user' do
+        expect(access_token).to eq(user.g5_access_token)
       end
     end
   end
