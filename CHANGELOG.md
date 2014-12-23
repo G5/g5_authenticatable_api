@@ -1,3 +1,9 @@
+## v0.3.0 (2014-12-23)
+
+* When there is already an authenticated session, validate the current
+  user's access token against the auth server on every API request
+  ([#5](https://github.com/G5/g5_authenticatable_api/pull/5))
+
 ## v0.2.0 (2014-03-12)
 
 * First open source release to [RubyGems](https://rubygems.org)
