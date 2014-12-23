@@ -35,8 +35,22 @@ describe G5AuthenticatableApi::TokenValidator do
       let(:warden) { double(:warden, user: user) }
       let(:user) { FactoryGirl.build_stubbed(:user) }
 
-      it 'should extract the token value from the session user' do
-        expect(access_token).to eq(user.g5_access_token)
+      context 'without token on request' do
+        let(:params) {}
+        let(:headers) {}
+
+        it 'should extract the token value from the session user' do
+          expect(access_token).to eq(user.g5_access_token)
+        end
+      end
+
+      context 'with auth param' do
+        let(:params) { {'access_token' => token_value} }
+        let(:headers) {}
+
+        it 'should give precedence to the token on the request' do
+          expect(access_token).to eq(token_value)
+        end
       end
     end
   end
