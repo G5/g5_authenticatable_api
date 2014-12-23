@@ -4,7 +4,7 @@ module G5AuthenticatableApi
   module Helpers
     module Grape
       def authenticate_user!
-        raise_auth_error if !(warden.try(:authenticated?) || token_validator.valid?)
+        raise_auth_error if !token_validator.valid?
       end
 
       def warden
@@ -14,7 +14,7 @@ module G5AuthenticatableApi
       private
       def token_validator
         request = Rack::Request.new(env)
-        @token_validator ||= TokenValidator.new(request.params, headers)
+        @token_validator ||= TokenValidator.new(request.params, headers, warden)
       end
 
       def raise_auth_error

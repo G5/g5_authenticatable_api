@@ -3,15 +3,12 @@ require 'spec_helper'
 shared_examples_for 'a warden authenticatable api' do
   context 'when user is authenticated' do
     let(:user) { create(:user) }
+    let(:token_value) { user.g5_access_token }
 
-    before do
-      login_as(user, scope: :user)
-      subject
-    end
+    before { login_as(user, scope: :user) }
+    after { logout }
 
-    it 'should be successful' do
-      expect(response).to be_success
-    end
+    include_examples 'token validation'
   end
 
   context 'when user is not authenticated' do

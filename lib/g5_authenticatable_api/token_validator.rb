@@ -2,9 +2,10 @@ module G5AuthenticatableApi
   class TokenValidator
     attr_reader :error
 
-    def initialize(params={},headers={})
+    def initialize(params={},headers={},warden=nil)
       @params = params || {}
       @headers = headers || {}
+      @warden = warden
     end
 
     def validate!
@@ -25,12 +26,9 @@ module G5AuthenticatableApi
     end
 
     def access_token
-      @access_token ||= if @headers['Authorization']
-        parts = @headers['Authorization'].match(/Bearer (?<access_token>\S+)/)
-        parts['access_token']
-      else
-        @params['access_token']
-      end
+      @access_token ||= (extract_token_from_header ||
+                         @params['access_token'] ||
+                         @warden.try(:user).try(:g5_access_token))
     end
 
     def auth_response_header
@@ -60,6 +58,13 @@ module G5AuthenticatableApi
     def error_description
       error_description = error.description if error.respond_to?(:description)
       error_description
+    end
+
+    def extract_token_from_header
+      if @headers['Authorization']
+        parts = @headers['Authorization'].match(/Bearer (?<access_token>\S+)/)
+        parts['access_token']
+      end
     end
   end
 end
