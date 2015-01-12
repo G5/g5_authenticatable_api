@@ -10,7 +10,7 @@ module G5AuthenticatableApi
 
     def validate!
       begin
-        auth_client.token_info
+        auth_client.token_info unless skip_validation?
       rescue StandardError => @error
         raise error
       end
@@ -65,6 +65,10 @@ module G5AuthenticatableApi
         parts = @headers['Authorization'].match(/Bearer (?<access_token>\S+)/)
         parts['access_token']
       end
+    end
+
+    def skip_validation?
+      @warden.try(:user) && !G5AuthenticatableApi.strict_token_validation
     end
   end
 end
