@@ -8,7 +8,28 @@ shared_examples_for 'a warden authenticatable api' do
     before { login_as(user, scope: :user) }
     after { logout }
 
-    include_examples 'token validation'
+    context 'when strict token validation is enabled' do
+      before do
+        G5AuthenticatableApi.strict_token_validation = true
+      end
+
+      include_examples 'token validation'
+    end
+
+    context 'when strict token validation is disabled' do
+      before do
+        G5AuthenticatableApi.strict_token_validation = false
+        subject
+      end
+
+      it 'should be successful' do
+        expect(response).to be_success
+      end
+
+      it 'should not validate the token against the auth server' do
+        expect(a_request(:get, 'auth.g5search.com/oauth/token/info')).to_not have_been_made
+      end
+    end
   end
 
   context 'when user is not authenticated' do
