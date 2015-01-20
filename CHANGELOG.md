@@ -1,3 +1,9 @@
+## v0.3.1 (2015-01-20)
+
+* Disable strict token validation for session-authenticated users by
+  default; enable with `G5AuthenticatableApi.strict_token_validation = true`
+  ([#6](https://github.com/G5/g5_authenticatable_api/pull/6)).
+
 ## v0.3.0 (2014-12-23)
 
 * When there is already an authenticated session, validate the current
