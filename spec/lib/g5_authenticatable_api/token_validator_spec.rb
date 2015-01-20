@@ -58,37 +58,85 @@ describe G5AuthenticatableApi::TokenValidator do
   describe '#validate!' do
     subject(:validate!) { validator.validate! }
 
-    context 'when token is valid' do
-      include_context 'valid access token'
+    context 'when token is on the request' do
+      context 'when token is valid' do
+        include_context 'valid access token'
 
-      it 'should initialize the auth client with the access token' do
-        validate!
-        expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
-               with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
+        it 'should initialize the auth client with the access token' do
+          validate!
+          expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
+                 with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
+        end
+
+        it 'should not raise errors during validation' do
+          expect { validate! }.to_not raise_error
+        end
+
+        it 'should not set an error on the validator' do
+          validate!
+          expect(validator.error).to be_nil
+        end
       end
 
-      it 'should not raise errors during validation' do
-        expect { validate! }.to_not raise_error
-      end
+      context 'when token is invalid' do
+        include_context 'invalid access token'
 
-      it 'should not set an error on the validator' do
-        validate!
-        expect(validator.error).to be_nil
+        it 'should re-raise the OAuth error' do
+          expect { validate! }.to raise_error(OAuth2::Error)
+        end
+
+        it 'should set the error on the validator' do
+          begin
+            validate!
+          rescue StandardError => validation_error
+            expect(validator.error).to eq(validation_error)
+          end
+        end
       end
     end
 
-    context 'when token is invalid' do
-      include_context 'invalid access token'
+    context 'when token is on the warden user' do
+      let(:warden) { double(:warden, user: user) }
+      let(:user) { FactoryGirl.build_stubbed(:user, g5_access_token: token_value) }
+      let(:params) {}
+      let(:headers) {}
 
-      it 'should re-raise the OAuth error' do
-        expect { validate! }.to raise_error(OAuth2::Error)
+      context 'when strict token validation is enabled' do
+        before { G5AuthenticatableApi.strict_token_validation = true }
+
+        context 'when the token is valid' do
+          include_context 'valid access token'
+
+          it 'should validate the access token against the auth server' do
+            validate!
+            expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
+                  with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
+          end
+
+          it 'should not raise errors during validation' do
+            expect { validate! }.to_not raise_error
+          end
+        end
+
+        context 'when token is invalid' do
+          include_context 'invalid access token'
+
+          it 'should re-raise the error' do
+            expect { validate! }.to raise_error(OAuth2::Error)
+          end
+        end
       end
 
-      it 'should set the error on the validator' do
-        begin
+      context 'when strict token validation is disabled' do
+        before { G5AuthenticatableApi.strict_token_validation = false }
+
+        it 'should not validate the access token against the auth server' do
           validate!
-        rescue StandardError => validation_error
-          expect(validator.error).to eq(validation_error)
+          expect(a_request(:get, 'authg5search.com/oauth/token/info')).to_not have_been_made
+        end
+
+        it 'should not raise errors during validation' do
+          expect { validate! }.to_not raise_error
         end
       end
     end

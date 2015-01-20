@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rack'
   spec.add_dependency 'g5_authentication_client', '~> 0.2'
+  spec.add_dependency 'activesupport', '>= 3.2'
 end

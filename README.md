@@ -35,6 +35,8 @@ service using token-based authentication.
 
 ## Configuration
 
+### Auth endpoint
+
 The API helpers need to know the endpoint for the G5 auth server to use when
 validating tokens. This may be configured in one of several ways:
 
@@ -51,6 +53,30 @@ validating tokens. This may be configured in one of several ways:
     config.endpoint = 'https://dev-auth.g5search.com'
   end
   ```
+
+### Strict token validation
+
+If your API supports session-based authentication through
+[devise_g5_authenticatable](https://github.com/G5/devise_g5_authenticatable),
+then you have the option of toggling strict token validation.
+
+If strict token validation is disabled (the default), then token validation
+will be bypassed if there is already an authenticated user in warden. This
+is fast, but it means that users with revoked or expired access tokens can
+still access your API as long as the local session remains active.
+
+```ruby
+G5AuthenticatableApi.strict_token_validation = false
+```
+
+If strict token validation is enabled, then the session user's access token
+will be periodically re-validated. Access to your API will be limited
+to users with active access tokens, but there is a performance penalty
+for this level of security.
+
+```ruby
+G5AuthenticatableApi.strict_token_validation = true
+```
 
 ## Usage
 
