@@ -61,14 +61,18 @@ module G5AuthenticatableApi
     end
 
     def extract_token_from_header
-      if @headers['Authorization']
-        parts = @headers['Authorization'].match(/Bearer (?<access_token>\S+)/)
+      if authorization_header
+        parts = authorization_header.match(/Bearer (?<access_token>\S+)/)
         parts['access_token']
       end
     end
 
     def skip_validation?
       @warden.try(:user) && !G5AuthenticatableApi.strict_token_validation
+    end
+
+    def authorization_header
+      @headers['Authorization'] || @headers['AUTHORIZATION']
     end
   end
 end

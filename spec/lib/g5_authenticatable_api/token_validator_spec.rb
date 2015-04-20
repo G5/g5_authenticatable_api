@@ -22,6 +22,15 @@ describe G5AuthenticatableApi::TokenValidator do
       end
     end
 
+    context 'with all caps authorization key' do
+      let(:headers) { {'AUTHORIZATION' => "Bearer #{token_value}"} }
+      let(:params) {}
+
+      it 'should extract the token value from the header' do
+        expect(access_token).to eq(token_value)
+      end
+    end
+
     context 'with auth param' do
       let(:params) { {'access_token' => token_value} }
       let(:headers) {}
