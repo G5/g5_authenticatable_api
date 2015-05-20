@@ -43,4 +43,60 @@ describe G5AuthenticatableApi::Services::UserFetcher do
       end
     end
   end
+
+  describe '#current_user' do
+    subject(:current_user) { user_fetcher.current_user }
+
+    before do
+      stub_request(:get, 'auth.g5search.com/v1/me').
+        with(headers: {'Authorization'=>"Bearer #{token_value}"}).
+        to_return(status: 200,
+                  body: raw_user_info,
+                  headers: {'Content-Type' => 'application/json'})
+    end
+
+    let(:raw_user_info) do
+      {
+        'id' => 42,
+        'email' => 'fred.rogers@thehood.net',
+        'first_name' => 'Fred',
+        'last_name' => 'Rogers',
+        'phone_number' => '(555) 555-1212',
+        'organization_name' => 'The Neighborhood',
+        'title' => 'Head Cardigan Wearer',
+        'roles' => [
+          {
+            'name' => 'viewer',
+            'type' => 'GLOBAL',
+            'urn' => nil
+          },
+          {
+            'name' => 'admin',
+            'type' => 'G5Updatable::Client',
+            'urn' => 'g5-c-some-randomly-generated-string'
+          }
+        ]
+      }
+    end
+
+    it 'has the correct id' do
+      expect(current_user.id).to eq(raw_user_info['id'])
+    end
+
+    it 'has the correct email' do
+      expect(current_user.email).to eq(raw_user_info['email'])
+    end
+
+    it 'has the correct first_name' do
+      expect(current_user.first_name).to eq(raw_user_info['first_name'])
+    end
+
+    it 'has the correct last_name' do
+      expect(current_user.last_name).to eq(raw_user_info['last_name'])
+    end
+
+    it 'has the correct number of roles' do
+      expect(current_user.roles.count).to eq(raw_user_info['roles'].count)
+    end
+  end
 end

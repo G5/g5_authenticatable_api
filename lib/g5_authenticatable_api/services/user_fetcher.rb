@@ -8,6 +8,10 @@ module G5AuthenticatableApi
       def initialize(access_token)
         @access_token = access_token
       end
+
+      def current_user
+        auth_client.me
+      end
     end
   end
 end
