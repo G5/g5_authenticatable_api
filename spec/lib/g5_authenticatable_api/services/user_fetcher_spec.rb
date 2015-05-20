@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe G5AuthenticatableApi::UserFetcher do
+describe G5AuthenticatableApi::Services::UserFetcher do
   subject(:user_fetcher) { described_class.new(token_value) }
   let(:token_value) { 'abc123' }
 

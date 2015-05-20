@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe G5AuthenticatableApi::TokenValidator do
+describe G5AuthenticatableApi::Services::TokenValidator do
   subject { validator }
 
   let(:validator) { described_class.new(params, headers, warden) }

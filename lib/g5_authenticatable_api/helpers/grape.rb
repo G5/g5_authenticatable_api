@@ -1,5 +1,5 @@
-require 'g5_authenticatable_api/token_validator'
-require 'g5_authenticatable_api/user_fetcher'
+require 'g5_authenticatable_api/services/token_validator'
+require 'g5_authenticatable_api/services/user_fetcher'
 
 module G5AuthenticatableApi
   module Helpers
@@ -16,7 +16,7 @@ module G5AuthenticatableApi
       private
       def token_validator
         request = Rack::Request.new(env)
-        @token_validator ||= TokenValidator.new(request.params, headers, warden)
+        @token_validator ||= Services::TokenValidator.new(request.params, headers, warden)
       end
 
       def raise_auth_error

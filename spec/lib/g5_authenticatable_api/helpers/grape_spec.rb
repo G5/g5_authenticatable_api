@@ -29,7 +29,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
                                access_token: token_value)
     end
     before do
-      allow(G5AuthenticatableApi::TokenValidator).to receive(:new).
+      allow(G5AuthenticatableApi::Services::TokenValidator).to receive(:new).
         and_return(token_validator)
     end
 
@@ -39,7 +39,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'initializes the token validator correctly' do
         authenticate_user!
-        expect(G5AuthenticatableApi::TokenValidator).to have_received(:new).
+        expect(G5AuthenticatableApi::Services::TokenValidator).to have_received(:new).
           with(params,
                {'Host'=>'example.org', 'Cookie'=>''},
                warden)
