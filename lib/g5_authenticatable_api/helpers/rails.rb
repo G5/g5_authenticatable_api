@@ -1,4 +1,5 @@
 require 'g5_authenticatable_api/token_validator'
+require 'g5_authenticatable_api/user_fetcher'
 
 module G5AuthenticatableApi
   module Helpers

@@ -73,6 +73,10 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     end
   end
 
+  describe '#token_info' do
+    pending 'impelement me!'
+  end
+
   describe '#current_auth_user' do
     pending 'implement me!'
   end

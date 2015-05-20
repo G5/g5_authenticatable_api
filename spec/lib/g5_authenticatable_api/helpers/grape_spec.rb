@@ -82,6 +82,9 @@ describe G5AuthenticatableApi::Helpers::Grape do
     end
   end
 
+  describe '#token_info' do
+
+  end
   describe '#current_auth_user' do
     pending 'implement me!'
   end
