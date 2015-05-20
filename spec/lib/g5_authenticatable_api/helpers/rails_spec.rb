@@ -97,8 +97,6 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     end
   end
 
-  describe '#current_auth_user' do
-    pending 'implement me!'
+  describe '#current_api_user' do
   end
 end
-
