@@ -4,6 +4,14 @@ describe G5AuthenticatableApi::UserFetcher do
   subject(:user_fetcher) { described_class.new(token_value) }
   let(:token_value) { 'abc123' }
 
+  describe '#access_token' do
+    subject(:access_token) { user_fetcher.access_token }
+
+    it 'returns the initialized token value' do
+      expect(access_token).to eq(token_value)
+    end
+  end
+
   describe '#token_info' do
     subject(:token_info) { user_fetcher.token_info }
 

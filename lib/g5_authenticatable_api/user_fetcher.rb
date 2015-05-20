@@ -1,17 +1,11 @@
+require 'g5_authenticatable_api/base_service'
+
 module G5AuthenticatableApi
-  class UserFetcher
+  class UserFetcher < BaseService
+    attr_reader :access_token
+
     def initialize(access_token)
       @access_token = access_token
-    end
-
-    def token_info
-      auth_client.token_info
-    end
-
-    private
-    def auth_client
-      @auth_client ||= G5AuthenticationClient::Client.new(allow_password_credentials: 'false',
-                                                          access_token: @access_token)
     end
   end
 end

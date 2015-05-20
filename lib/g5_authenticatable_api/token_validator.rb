@@ -1,5 +1,7 @@
+require 'g5_authenticatable_api/base_service'
+
 module G5AuthenticatableApi
-  class TokenValidator
+  class TokenValidator < BaseService
     attr_reader :error
 
     def initialize(params={},headers={},warden=nil)
@@ -10,7 +12,7 @@ module G5AuthenticatableApi
 
     def validate!
       begin
-        auth_client.token_info unless skip_validation?
+        token_info unless skip_validation?
       rescue StandardError => @error
         raise error
       end
@@ -42,11 +44,6 @@ module G5AuthenticatableApi
 
         auth_header
       end
-    end
-
-    def auth_client
-      @auth_client ||= G5AuthenticationClient::Client.new(allow_password_credentials: 'false',
-                                                          access_token: access_token)
     end
 
     private

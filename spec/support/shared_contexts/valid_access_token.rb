@@ -9,10 +9,10 @@ shared_context 'valid access token' do
 
   let(:raw_token_info) do
     {
-      "resource_owner_id" => 42,
-      "scopes" => [],
-      "expires_in_seconds" => 120,
-      "application" => {"uid" => "abcdefg112358"}
+      'resource_owner_id' => '42',
+      'scopes' => [],
+      'expires_in_seconds' => 120,
+      'application' => {'uid' => 'abcdefg112358'}
     }
   end
 end
