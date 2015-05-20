@@ -13,10 +13,18 @@ module G5AuthenticatableApi
         env['warden']
       end
 
+      def token_info
+        user_fetcher.token_info
+      end
+
       private
       def token_validator
         request = Rack::Request.new(env)
         @token_validator ||= Services::TokenValidator.new(request.params, headers, warden)
+      end
+
+      def user_fetcher
+        @user_fetcher ||= Services::UserFetcher.new(env['g5_access_token'])
       end
 
       def raise_auth_error

@@ -74,7 +74,27 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
   end
 
   describe '#token_info' do
-    pending 'impelement me!'
+    subject(:token_info) { controller.token_info }
+
+    before { request.env['g5_access_token'] = token_value }
+    let(:token_value) { 'abc123' }
+
+    before do
+      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
+        and_return(user_fetcher)
+    end
+    let(:user_fetcher) { double(:user_fetcher, token_info: mock_token_info) }
+    let(:mock_token_info) { double(:token_info) }
+
+    it 'initializes the user fetcher service correctly' do
+      token_info
+      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new).
+        with(token_value)
+    end
+
+    it 'returns the token info from the service' do
+      expect(token_info).to eq(mock_token_info)
+    end
   end
 
   describe '#current_auth_user' do

@@ -7,16 +7,19 @@ describe G5AuthenticatableApi::Helpers::Grape do
     Class.new(Grape::API) do
       helpers G5AuthenticatableApi::Helpers::Grape
 
-      before { authenticate_user! }
-
-      get :index do
+      get :authenticate do
+        authenticate_user!
         { hello: 'world' }
+      end
+
+      get :token_info do
+        token_info.to_json
       end
     end
   end
 
   describe '#authenticate_user!' do
-    subject(:authenticate_user!) { get :index, params, env }
+    subject(:authenticate_user!) { get :authenticate, params, env }
     let(:params) { {'access_token' => token_value} }
     let(:env) { {'warden' => warden} }
     let(:warden) { double(:warden) }
@@ -83,8 +86,29 @@ describe G5AuthenticatableApi::Helpers::Grape do
   end
 
   describe '#token_info' do
+    subject(:token_info) { get :token_info, {}, env }
+    let(:env) { {'g5_access_token' => token_value} }
+    let(:token_value) { 'abc123' }
 
+    before do
+      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
+        and_return(user_fetcher)
+    end
+    let(:user_fetcher) { double(:user_fetcher, token_info: mock_token_info) }
+    let(:mock_token_info) { double(:token_info, to_json: '[mock_token_info_json]') }
+
+    it 'initializes the user fetcher service correctly' do
+      token_info
+      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new).
+        with(token_value)
+    end
+
+    it 'returns the token info from the service' do
+      token_info
+      expect(last_response.body).to eq(mock_token_info.to_json)
+    end
   end
+
   describe '#current_auth_user' do
     pending 'implement me!'
   end
