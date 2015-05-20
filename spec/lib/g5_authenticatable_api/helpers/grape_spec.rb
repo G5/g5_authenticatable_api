@@ -25,7 +25,8 @@ describe G5AuthenticatableApi::Helpers::Grape do
 
     let(:token_validator) do
       double(:token_validator, valid?: valid,
-                               auth_response_header: auth_response_header)
+                               auth_response_header: auth_response_header,
+                               access_token: token_value)
     end
     before do
       allow(G5AuthenticatableApi::TokenValidator).to receive(:new).
@@ -52,6 +53,11 @@ describe G5AuthenticatableApi::Helpers::Grape do
       it 'does not set the authenticate response header' do
         authenticate_user!
         expect(last_response).to_not have_header('WWW-Authenticate')
+      end
+
+      it 'sets the access_token in the request env' do
+        authenticate_user!
+        expect(last_request.env['g5_access_token']).to eq(token_value)
       end
     end
 

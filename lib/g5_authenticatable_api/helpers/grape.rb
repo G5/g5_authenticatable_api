@@ -5,6 +5,7 @@ module G5AuthenticatableApi
     module Grape
       def authenticate_user!
         raise_auth_error if !token_validator.valid?
+        env['g5_access_token'] = token_validator.access_token
       end
 
       def warden
