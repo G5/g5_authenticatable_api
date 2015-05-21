@@ -6,36 +6,35 @@ module G5AuthenticatableApi
     module Rails
       def authenticate_api_user!
         raise_auth_error if !token_validator.valid?
-        self.access_token = token_validator.access_token
+      end
+
+      def token_data
+        @token_data ||= token_info.token_data
+      end
+
+      def current_api_user
+        @current_api_user ||= user_fetcher.current_user
+      end
+
+      def access_token
+        @access_token ||= token_info.access_token
       end
 
       def warden
         request.env['warden']
       end
 
-      def token_info
-        user_fetcher.token_info
-      end
-
-      def current_api_user
-        user_fetcher.current_user
-      end
-
-      def access_token=(token_value)
-        request.env['g5_access_token'] = token_value
-      end
-
-      def access_token
-        request.env['g5_access_token']
-      end
-
       private
+      def token_info
+        @token_info ||= Services::TokenInfo.new(request.params, request.headers, warden)
+      end
+
       def token_validator
         @token_validator ||= Services::TokenValidator.new(request.params, request.headers, warden)
       end
 
       def user_fetcher
-        @user_fetcher ||= Services::UserFetcher.new(access_token, warden)
+        @user_fetcher ||= Services::UserFetcher.new(request.params, request.headers, warden)
       end
 
       def raise_auth_error

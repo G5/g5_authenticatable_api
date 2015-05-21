@@ -2,9 +2,13 @@ require 'spec_helper'
 
 describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
   controller(ActionController::Base) do
-    before_action :authenticate_api_user!
+    before_action :authenticate_api_user!, only: :index
 
     def index
+      render json: [], status: :ok
+    end
+
+    def new
       render json: [], status: :ok
     end
   end
@@ -49,10 +53,6 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
         expect(response).to_not have_header('WWW-Authenticate')
       end
 
-      it 'sets the access token in the request env' do
-        authenticate_api_user!
-        expect(request.env['g5_access_token']).to eq(token_value)
-      end
     end
 
     context 'when token is invalid' do
@@ -68,55 +68,77 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
         authenticate_api_user!
         expect(JSON.parse(response.body)).to eq('error' => 'Unauthorized')
       end
-
-      it 'sets the authenticate response header' do
-        authenticate_api_user!
-        expect(response).to have_header('WWW-Authenticate' => auth_response_header)
-      end
     end
   end
 
-  describe '#token_info' do
-    subject(:token_info) { controller.token_info }
-
-    before { request.env['g5_access_token'] = token_value }
-    let(:token_value) { 'abc123' }
+  describe '#token_data' do
+    subject(:token_data) { controller.token_data }
 
     before do
-      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
-        and_return(user_fetcher)
+      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
+        and_return(token_info)
     end
-    let(:user_fetcher) { double(:user_fetcher, token_info: mock_token_info) }
-    let(:mock_token_info) { double(:token_info) }
+    let(:token_info) { double(:user_fetcher, token_data: mock_token_data) }
+    let(:mock_token_data) { double(:token_info) }
 
-    it 'initializes the user fetcher service correctly' do
-      token_info
-      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new).
-        with(token_value, warden)
+    before { get :new, access_token: 'abc123' }
+
+    it 'initializes the token info service correctly' do
+      token_data
+      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new).
+        with(request.params,
+             an_instance_of(ActionDispatch::Http::Headers),
+             warden)
     end
 
-    it 'returns the token info from the service' do
-      expect(token_info).to eq(mock_token_info)
+    it 'returns the token data from the service' do
+      expect(token_data).to eq(mock_token_data)
+    end
+  end
+
+  describe '#access_token' do
+    subject(:access_token) { controller.access_token }
+
+    before do
+      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
+        and_return(token_info)
+    end
+    let(:token_info) { double(:token_info, access_token: token_value) }
+    let(:token_value) { 'abc123' }
+
+    before { get :new, access_token: token_value }
+
+    it 'initializes the token info service correctly' do
+      access_token
+      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new).
+        with(request.params,
+             an_instance_of(ActionDispatch::Http::Headers),
+             warden)
+    end
+
+    it 'returns the access token from the service' do
+      expect(access_token).to eq(token_value)
     end
   end
 
   describe '#current_api_user' do
     subject(:current_api_user) { controller.current_api_user }
 
-    before { request.env['g5_access_token'] = token_value }
-    let(:token_value) { 'abc123' }
-
-     before do
+    before do
       allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
         and_return(user_fetcher)
     end
     let(:user_fetcher) { double(:user_fetcher, current_user: user) }
     let(:user) { double(:user) }
 
+    before { get :new, access_token: 'abc123' }
+
     it 'initializes the user fetcher service correctly' do
       current_api_user
       expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new).
-        with(token_value, warden)
+        with(request.params,
+             an_instance_of(ActionDispatch::Http::Headers),
+             warden)
     end
 
     it 'returns the user from the service' do
