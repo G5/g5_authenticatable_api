@@ -6,37 +6,39 @@ module G5AuthenticatableApi
     module Grape
       def authenticate_user!
         raise_auth_error if !token_validator.valid?
-        self.access_token = token_validator.access_token
       end
 
-      def token_info
-        user_fetcher.token_info
+      def token_data
+        @token_data ||= token_info.token_data
       end
 
       def current_user
-        user_fetcher.current_user
+        @current_user ||= user_fetcher.current_user
+      end
+
+      def access_token
+        @access_token ||= token_info.access_token
       end
 
       def warden
         env['warden']
       end
 
-      def access_token=(token_value)
-        env['g5_access_token'] = token_value
-      end
-
-      def access_token
-        env['g5_access_token']
-      end
-
       private
+      def request
+        Rack::Request.new(env)
+      end
+
+      def token_info
+        @token_info ||= Services::TokenInfo.new(request.params, headers, warden)
+      end
+
       def token_validator
-        request = Rack::Request.new(env)
         @token_validator ||= Services::TokenValidator.new(request.params, headers, warden)
       end
 
       def user_fetcher
-        @user_fetcher ||= Services::UserFetcher.new(access_token, warden)
+        @user_fetcher ||= Services::UserFetcher.new(request.params, headers, warden)
       end
 
       def raise_auth_error
