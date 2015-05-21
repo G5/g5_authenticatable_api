@@ -3,7 +3,7 @@ shared_context 'valid access token' do
     stub_request(:get, 'auth.g5search.com/oauth/token/info').
       with(headers: {'Authorization'=>"Bearer #{token_value}"}).
       to_return(status: 200,
-                body: raw_token_info,
+                body: raw_token_info.to_json,
                 headers: {'Content-Type' => 'application/json'})
   end
 

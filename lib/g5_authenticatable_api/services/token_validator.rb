@@ -1,19 +1,13 @@
-require 'g5_authenticatable_api/services/service'
+require 'g5_authenticatable_api/services/token_info'
 
 module G5AuthenticatableApi
   module Services
-    class TokenValidator < Service
+    class TokenValidator < TokenInfo
       attr_reader :error
-
-      def initialize(params={},headers={},warden=nil)
-        @params = params || {}
-        @headers = headers || {}
-        @warden = warden
-      end
 
       def validate!
         begin
-          token_info unless skip_validation?
+          token_data unless skip_validation?
         rescue StandardError => @error
           raise error
         end
@@ -26,12 +20,6 @@ module G5AuthenticatableApi
         rescue StandardError => e
           false
         end
-      end
-
-      def access_token
-        @access_token ||= (extract_token_from_header ||
-                           @params['access_token'] ||
-                           @warden.try(:user).try(:g5_access_token))
       end
 
       def auth_response_header
@@ -58,19 +46,8 @@ module G5AuthenticatableApi
         error_description
       end
 
-      def extract_token_from_header
-        if authorization_header
-          parts = authorization_header.match(/Bearer (?<access_token>\S+)/)
-          parts['access_token']
-        end
-      end
-
       def skip_validation?
         @warden.try(:user) && !G5AuthenticatableApi.strict_token_validation
-      end
-
-      def authorization_header
-        @headers['Authorization'] || @headers['AUTHORIZATION']
       end
     end
   end
