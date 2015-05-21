@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.1.6
+script:
+  - (cd spec/dummy; RAILS_ENV=test bundle exec rake db:drop db:create db:schema:load)
+  - bundle exec rspec spec
+before_script:
+  - cp spec/dummy/config/database.yml.ci spec/dummy/config/database.yml
+env:
+  global:
+    - DEVISE_SECRET_KEY=foo

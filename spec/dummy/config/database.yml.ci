@@ -2,5 +2,4 @@ test:
   adapter: postgresql
   encoding: unicode
   database: g5_authenticatable_api_test
-  pool: 5
-  username: ubuntu
+  username: postgres
