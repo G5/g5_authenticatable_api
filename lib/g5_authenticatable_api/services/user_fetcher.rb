@@ -5,12 +5,17 @@ module G5AuthenticatableApi
     class UserFetcher < Service
       attr_reader :access_token
 
-      def initialize(access_token)
+      def initialize(access_token, warden=nil)
         @access_token = access_token
+        @warden = warden
       end
 
       def current_user
-        auth_client.me
+        if access_token == @warden.try(:user).try(:g5_access_token)
+          @warden.user
+        else
+          auth_client.me
+        end
       end
     end
   end

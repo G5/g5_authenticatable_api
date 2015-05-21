@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe G5AuthenticatableApi::Services::UserFetcher do
-  subject(:user_fetcher) { described_class.new(token_value) }
+  subject(:user_fetcher) { described_class.new(token_value, warden) }
   let(:token_value) { 'abc123' }
+  let(:warden) {}
 
   describe '#access_token' do
     subject(:access_token) { user_fetcher.access_token }
@@ -49,24 +50,30 @@ describe G5AuthenticatableApi::Services::UserFetcher do
 
     subject(:current_user) { user_fetcher.current_user }
 
-    it 'has the correct id' do
-      expect(current_user.id).to eq(raw_user_info['id'])
+    context 'when there is no warden user' do
+      it_behaves_like 'an auth user' do
+        let(:user) { current_user }
+      end
     end
 
-    it 'has the correct email' do
-      expect(current_user.email).to eq(raw_user_info['email'])
-    end
+    context 'when there is a warden user' do
+      let(:warden) { double(:warden, user: warden_user) }
 
-    it 'has the correct first_name' do
-      expect(current_user.first_name).to eq(raw_user_info['first_name'])
-    end
+      context 'when the access_token is for the warden user' do
+        let(:warden_user) { double(:user, g5_access_token: token_value) }
 
-    it 'has the correct last_name' do
-      expect(current_user.last_name).to eq(raw_user_info['last_name'])
-    end
+        it 'returns the warden user' do
+          expect(current_user).to eq(warden_user)
+        end
+      end
 
-    it 'has the correct number of roles' do
-      expect(current_user.roles.count).to eq(raw_user_info['roles'].count)
+      context 'when the access token is for a different user' do
+        let(:warden_user) { double(:user, g5_access_token: "#{token_value}42") }
+
+        it_behaves_like 'an auth user' do
+          let(:user) { current_user }
+        end
+      end
     end
   end
 end
