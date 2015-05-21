@@ -108,7 +108,7 @@ end
 
 After authenticating an API user, you can retrieve the current token data as a
 [`G5AuthenticationClient::TokenInfo`](https://github.com/G5/g5_authentication_client/blob/master/lib/g5_authentication_client/token_info.rb)
-using the `token_info` helper:
+using the `token_data` helper:
 
 ```ruby
 class MyResourceController < ApplicationController
@@ -117,7 +117,7 @@ class MyResourceController < ApplicationController
   respond_to :json
 
   def index
-    token_expiration = token_info.expires_in_seconds
+    token_expiration = token_data.expires_in_seconds
     # ...
   end
 end
@@ -136,6 +136,23 @@ class MyResourceController < ApplicationController
 
   def index
     user = current_api_user
+    # ...
+  end
+end
+```
+
+
+Finally, you can retrieve the value of the access token in use for this request
+by using the `access_token` helper:
+
+```ruby
+class MyResourceController < ApplicationController
+  before_filter :authenticate_api_user!
+
+  respond_to :json
+
+  def index
+    token = access_token
     # ...
   end
 end
@@ -175,7 +192,7 @@ end
 
 After authenticating an API user, you can retrieve the current token data as a
 [`G5AuthenticationClient::TokenInfo`](https://github.com/G5/g5_authentication_client/blob/master/lib/g5_authentication_client/token_info.rb)
-using the `token_info` helper:
+using the `token_data` helper:
 
 ```ruby
 class MyApi < Grape::API
@@ -184,7 +201,7 @@ class MyApi < Grape::API
   before { authenticate_user! }
 
   get :index do
-    token_expiration = token_info.expires_in_seconds
+    token_expiration = token_data.expires_in_seconds
     # ...
   end
 end
@@ -203,6 +220,22 @@ class MyApi < Grape::API
 
   get :index do
     user = current_user
+    # ...
+  end
+end
+```
+
+You can retrieve the value of the access token in use for this request with the
+`access_token` helper:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::Helpers::Grape
+
+  before { authenticate_user! }
+
+  get :index do
+    token = access_token
     # ...
   end
 end
