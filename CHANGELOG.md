@@ -1,4 +1,4 @@
-## v0.4.0 (TBD)
+## v0.4.0 (2015-05-22)
 
 * Add helpers for retrieving current API user as well as more detailed token
   information

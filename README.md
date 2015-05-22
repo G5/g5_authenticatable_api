@@ -9,7 +9,7 @@ service using token-based authentication.
 
 ## Current Version
 
-0.3.1
+0.4.0
 
 ## Requirements
 
