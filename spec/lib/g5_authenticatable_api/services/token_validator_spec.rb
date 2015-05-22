@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe G5AuthenticatableApi::TokenValidator do
+describe G5AuthenticatableApi::Services::TokenValidator do
   subject { validator }
 
   let(:validator) { described_class.new(params, headers, warden) }
@@ -9,60 +9,6 @@ describe G5AuthenticatableApi::TokenValidator do
   let(:params) { {'access_token' => token_value} }
   let(:token_value) { 'abc123' }
   let(:warden) {}
-
-  describe '#access_token' do
-    subject(:access_token) { validator.access_token }
-
-    context 'with auth header' do
-      let(:headers) { {'Authorization' => "Bearer #{token_value}"} }
-      let(:params) {}
-
-      it 'should extract the token value from the header' do
-        expect(access_token).to eq(token_value)
-      end
-    end
-
-    context 'with all caps authorization key' do
-      let(:headers) { {'AUTHORIZATION' => "Bearer #{token_value}"} }
-      let(:params) {}
-
-      it 'should extract the token value from the header' do
-        expect(access_token).to eq(token_value)
-      end
-    end
-
-    context 'with auth param' do
-      let(:params) { {'access_token' => token_value} }
-      let(:headers) {}
-
-      it 'should extract the token value from the access_token parameter' do
-        expect(access_token).to eq(token_value)
-      end
-    end
-
-    context 'with warden user' do
-      let(:warden) { double(:warden, user: user) }
-      let(:user) { FactoryGirl.build_stubbed(:user) }
-
-      context 'without token on request' do
-        let(:params) {}
-        let(:headers) {}
-
-        it 'should extract the token value from the session user' do
-          expect(access_token).to eq(user.g5_access_token)
-        end
-      end
-
-      context 'with auth param' do
-        let(:params) { {'access_token' => token_value} }
-        let(:headers) {}
-
-        it 'should give precedence to the token on the request' do
-          expect(access_token).to eq(token_value)
-        end
-      end
-    end
-  end
 
   describe '#validate!' do
     subject(:validate!) { validator.validate! }

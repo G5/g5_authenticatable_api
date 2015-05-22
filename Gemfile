@@ -26,6 +26,7 @@ group :test do
   gem 'webmock'
   gem 'shoulda-matchers', '~> 2.6'
   gem 'rspec-http', require: false
+  gem 'rack-test'
 end
 
 # Declare any dependencies that are still in development here instead of in
