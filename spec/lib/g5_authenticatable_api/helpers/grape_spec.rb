@@ -35,7 +35,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
   let(:headers) { {'Host'=>'example.org', 'Cookie'=>''} }
 
   describe '#authenticate_user!' do
-    subject(:authenticate_user!) { get :authenticate, params, env }
+    subject(:authenticate_user!) { get '/authenticate', params, env }
 
     let(:token_validator) do
       double(:token_validator, valid?: valid,
@@ -90,7 +90,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
   end
 
   describe '#token_data' do
-    subject(:token_data) { get :token_data, params, env }
+    subject(:token_data) { get '/token_data', params, env }
 
     before do
       allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
@@ -112,7 +112,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
   end
 
   describe '#current_user' do
-    subject(:current_user) { get :current_user, params, env }
+    subject(:current_user) { get '/current_user', params, env }
 
     before do
       allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
@@ -134,7 +134,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
   end
 
   describe '#access_token' do
-    subject(:access_token) { get :access_token, params, env }
+    subject(:access_token) { get '/access_token', params, env }
 
     before do
       allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
