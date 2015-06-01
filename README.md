@@ -9,7 +9,7 @@ service using token-based authentication.
 
 ## Current Version
 
-0.3.1
+0.4.0
 
 ## Requirements
 
@@ -106,6 +106,58 @@ class MyResourceController < ApplicationController
 end
 ```
 
+After authenticating an API user, you can retrieve the current token data as a
+[`G5AuthenticationClient::TokenInfo`](https://github.com/G5/g5_authentication_client/blob/master/lib/g5_authentication_client/token_info.rb)
+using the `token_data` helper:
+
+```ruby
+class MyResourceController < ApplicationController
+  before_filter :authenticate_api_user!
+
+  respond_to :json
+
+  def index
+    token_expiration = token_data.expires_in_seconds
+    # ...
+  end
+end
+```
+
+You can retrieve the current user data using the `current_api_user` helper,
+which will attempt to retrieve the data from
+[warden](https://github.com/hassox/warden) if possible. Otherwise it will return
+a [`G5AuthenticationClient::User`](https://github.com/G5/g5_authentication_client/blob/master/lib/g5_authentication_client/user.rb):
+
+```ruby
+class MyResourceController < ApplicationController
+  before_filter :authenticate_api_user!
+
+  respond_to :json
+
+  def index
+    user = current_api_user
+    # ...
+  end
+end
+```
+
+
+Finally, you can retrieve the value of the access token in use for this request
+by using the `access_token` helper:
+
+```ruby
+class MyResourceController < ApplicationController
+  before_filter :authenticate_api_user!
+
+  respond_to :json
+
+  def index
+    token = access_token
+    # ...
+  end
+end
+```
+
 ### Grape
 
 To require authentication for all endpoints exposed by your API:
@@ -134,6 +186,57 @@ class MyApi < Grape::API
 
   get :open do
     { hello: 'world' }
+  end
+end
+```
+
+After authenticating an API user, you can retrieve the current token data as a
+[`G5AuthenticationClient::TokenInfo`](https://github.com/G5/g5_authentication_client/blob/master/lib/g5_authentication_client/token_info.rb)
+using the `token_data` helper:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::Helpers::Grape
+
+  before { authenticate_user! }
+
+  get :index do
+    token_expiration = token_data.expires_in_seconds
+    # ...
+  end
+end
+```
+
+You can retrieve the current user data using the `current_user` helper,
+which will attempt to retrieve the data from
+[warden](https://github.com/hassox/warden) if possible. Otherwise it will return
+a [`G5AuthenticationClient::User`](https://github.com/G5/g5_authentication_client/blob/master/lib/g5_authentication_client/user.rb):
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::Helpers::Grape
+
+  before { authenticate_user! }
+
+  get :index do
+    user = current_user
+    # ...
+  end
+end
+```
+
+You can retrieve the value of the access token in use for this request with the
+`access_token` helper:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::Helpers::Grape
+
+  before { authenticate_user! }
+
+  get :index do
+    token = access_token
+    # ...
   end
 end
 ```

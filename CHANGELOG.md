@@ -1,3 +1,14 @@
+## v0.4.0 (2015-05-22)
+
+* Add helpers for retrieving current API user as well as more detailed token
+  information
+  ([#8](https://github.com/G5/g5_authenticatable_api/pull/8))
+
+## v0.3.2 (2015-04-20)
+
+* Fix for case-insensitive authorization request header
+  ([#7](https://github.com/G5/g5_authenticatable_api/pull/7))
+
 ## v0.3.1 (2015-01-20)
 
 * Disable strict token validation for session-authenticated users by
