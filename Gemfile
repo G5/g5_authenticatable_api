@@ -17,17 +17,16 @@ gem 'rails', '4.1.16'
 
 group :test, :development do
   gem 'pry'
-  gem 'rake', '< 11'
-  gem 'rspec-rails', '~> 2.14'
+  gem 'rspec-rails', '~> 3.6'
 end
 
 group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter', '~> 1.0'
   gem 'factory_girl_rails', '~> 4.3', require: false
-  gem 'rack-test', '0.6.2'
+  gem 'rack-test'
   gem 'rspec-http', require: false
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', require: false
   gem 'webmock'
 end

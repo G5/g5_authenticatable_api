@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe 'A Secure Rails API endpoint' do
+require 'rails_helper'
+
+RSpec.describe 'A Secure Rails API endpoint' do
   let(:params) {}
   let(:headers) {}
 

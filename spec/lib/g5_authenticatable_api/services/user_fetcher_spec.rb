@@ -1,8 +1,10 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe G5AuthenticatableApi::Services::UserFetcher do
+require 'rails_helper'
+
+RSpec.describe G5AuthenticatableApi::Services::UserFetcher do
   subject(:user_fetcher) { described_class.new(params, headers, warden) }
-  let(:params) { {'access_token' => token_value} }
+  let(:params) { { 'access_token' => token_value } }
   let(:token_value) { 'abc123' }
   let(:headers) {}
   let(:warden) {}

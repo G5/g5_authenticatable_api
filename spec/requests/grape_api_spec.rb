@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe 'a secure Grape API endpoint' do
+require 'rails_helper'
+
+RSpec.describe 'a secure Grape API endpoint' do
   let(:endpoint) { '/grape_api/hello' }
   let(:params) {}
   let(:headers) {}

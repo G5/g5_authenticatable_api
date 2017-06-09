@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
+require 'rails_helper'
+
+RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
   controller(ActionController::Base) do
     before_action :authenticate_api_user!, only: :index
 
@@ -27,8 +29,8 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
                                access_token: token_value)
     end
     before do
-      allow(G5AuthenticatableApi::Services::TokenValidator).to receive(:new).
-        and_return(token_validator)
+      allow(G5AuthenticatableApi::Services::TokenValidator).to receive(:new)
+        .and_return(token_validator)
     end
 
     context 'when token is valid' do
@@ -37,10 +39,11 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
 
       it 'initializes the token validator correctly' do
         authenticate_api_user!
-        expect(G5AuthenticatableApi::Services::TokenValidator).to have_received(:new).
-          with(request.params,
-               an_instance_of(ActionDispatch::Http::Headers),
-               warden)
+        expect(G5AuthenticatableApi::Services::TokenValidator)
+          .to have_received(:new)
+          .with(request.params,
+                an_instance_of(ActionDispatch::Http::Headers),
+                warden)
       end
 
       it 'is successful' do
@@ -52,7 +55,6 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
         authenticate_api_user!
         expect(response).to_not have_header('WWW-Authenticate')
       end
-
     end
 
     context 'when token is invalid' do
@@ -75,8 +77,8 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     subject(:token_data) { controller.token_data }
 
     before do
-      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
-        and_return(token_info)
+      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new)
+        .and_return(token_info)
     end
     let(:token_info) { double(:user_fetcher, token_data: mock_token_data) }
     let(:mock_token_data) { double(:token_info) }
@@ -85,10 +87,11 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
 
     it 'initializes the token info service correctly' do
       token_data
-      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new).
-        with(request.params,
-             an_instance_of(ActionDispatch::Http::Headers),
-             warden)
+      expect(G5AuthenticatableApi::Services::TokenInfo)
+        .to have_received(:new)
+        .with(request.params,
+              an_instance_of(ActionDispatch::Http::Headers),
+              warden)
     end
 
     it 'returns the token data from the service' do
@@ -100,8 +103,8 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     subject(:access_token) { controller.access_token }
 
     before do
-      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
-        and_return(token_info)
+      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new)
+        .and_return(token_info)
     end
     let(:token_info) { double(:token_info, access_token: token_value) }
     let(:token_value) { 'abc123' }
@@ -110,10 +113,11 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
 
     it 'initializes the token info service correctly' do
       access_token
-      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new).
-        with(request.params,
-             an_instance_of(ActionDispatch::Http::Headers),
-             warden)
+      expect(G5AuthenticatableApi::Services::TokenInfo)
+        .to have_received(:new)
+        .with(request.params,
+              an_instance_of(ActionDispatch::Http::Headers),
+              warden)
     end
 
     it 'returns the access token from the service' do
@@ -125,8 +129,8 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     subject(:current_api_user) { controller.current_api_user }
 
     before do
-      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
-        and_return(user_fetcher)
+      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new)
+        .and_return(user_fetcher)
     end
     let(:user_fetcher) { double(:user_fetcher, current_user: user) }
     let(:user) { double(:user) }
@@ -135,10 +139,10 @@ describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
 
     it 'initializes the user fetcher service correctly' do
       current_api_user
-      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new).
-        with(request.params,
-             an_instance_of(ActionDispatch::Http::Headers),
-             warden)
+      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new)
+        .with(request.params,
+              an_instance_of(ActionDispatch::Http::Headers),
+              warden)
     end
 
     it 'returns the user from the service' do

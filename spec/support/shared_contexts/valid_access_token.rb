@@ -1,10 +1,12 @@
-shared_context 'valid access token' do
+# frozen_string_literal: true
+
+RSpec.shared_context 'valid access token' do
   before do
-    stub_request(:get, 'auth.g5search.com/oauth/token/info').
-      with(headers: {'Authorization'=>"Bearer #{token_value}"}).
-      to_return(status: 200,
-                body: raw_token_info.to_json,
-                headers: {'Content-Type' => 'application/json'})
+    stub_request(:get, 'auth.g5search.com/oauth/token/info')
+      .with(headers: { 'Authorization' => "Bearer #{token_value}" })
+      .to_return(status: 200,
+                 body: raw_token_info.to_json,
+                 headers: { 'Content-Type' => 'application/json' })
   end
 
   let(:raw_token_info) do
@@ -12,7 +14,7 @@ shared_context 'valid access token' do
       'resource_owner_id' => '42',
       'scopes' => [],
       'expires_in_seconds' => 120,
-      'application' => {'uid' => 'abcdefg112358'}
+      'application' => { 'uid' => 'abcdefg112358' }
     }
   end
 end

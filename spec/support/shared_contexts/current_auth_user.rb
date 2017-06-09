@@ -1,10 +1,12 @@
-shared_context 'current auth user' do
+# frozen_string_literal: true
+
+RSpec.shared_context 'current auth user' do
   before do
-    stub_request(:get, 'auth.g5search.com/v1/me').
-      with(headers: {'Authorization'=>"Bearer #{token_value}"}).
-      to_return(status: 200,
-                body: raw_user_info.to_json,
-                headers: {'Content-Type' => 'application/json'})
+    stub_request(:get, 'auth.g5search.com/v1/me')
+      .with(headers: { 'Authorization' => "Bearer #{token_value}" })
+      .to_return(status: 200,
+                 body: raw_user_info.to_json,
+                 headers: { 'Content-Type' => 'application/json' })
   end
 
   let(:raw_user_info) do

@@ -1,4 +1,6 @@
-shared_examples_for 'an auth user' do
+# frozen_string_literal: true
+
+RSpec.shared_examples_for 'an auth user' do
   it 'has the correct id' do
     expect(user.id).to eq(raw_user_info['id'])
   end

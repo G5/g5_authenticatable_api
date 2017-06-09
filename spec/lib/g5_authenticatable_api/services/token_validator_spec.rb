@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
-describe G5AuthenticatableApi::Services::TokenValidator do
+RSpec.describe G5AuthenticatableApi::Services::TokenValidator do
   subject { validator }
 
   let(:validator) { described_class.new(params, headers, warden) }

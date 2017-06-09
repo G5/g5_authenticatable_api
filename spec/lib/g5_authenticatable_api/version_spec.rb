@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe G5AuthenticatableApi do
+require 'rails_helper'
+
+RSpec.describe G5AuthenticatableApi do
   it 'should have a version' do
     expect(G5AuthenticatableApi::VERSION).to be
   end
