@@ -13,7 +13,7 @@ gem 'devise_g5_authenticatable'
 gem 'grape'
 gem 'jquery-rails'
 gem 'pg'
-gem 'rails', '4.1.16'
+gem 'rails', '4.2.8'
 
 group :test, :development do
   gem 'appraisal'

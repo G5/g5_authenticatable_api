@@ -1,8 +1,10 @@
 language: ruby
 rvm:
   - 2.2.7
+  - 2.3.4
 gemfile:
   - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
 script:
   - bundle exec rspec spec
 before_script:

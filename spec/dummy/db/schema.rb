@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20140223194521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "articles", force: true do |t|
+  create_table "articles", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
     t.string   "tags"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20140223194521) do
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "email",           default: "",   null: false
     t.string   "provider",        default: "g5", null: false
     t.string   "uid",                            null: false
