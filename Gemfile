@@ -16,6 +16,7 @@ gem 'pg'
 gem 'rails', '4.1.16'
 
 group :test, :development do
+  gem 'appraisal'
   gem 'pry'
   gem 'rspec-rails', '~> 3.6'
 end
