@@ -1,12 +1,11 @@
+# frozen_string_literal: true
+
 # MUST happen before any other code is loaded
 require 'simplecov'
-SimpleCov.start 'test_frameworks'
+SimpleCov.start 'rails'
 
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
-
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../dummy/config/environment", __FILE__)
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../dummy/config/environment', __FILE__)
 
 require 'rspec/rails'
 require 'rspec/http'
