@@ -16,6 +16,7 @@ matrix:
     - rvm: 2.4.1
 cache:
   bundler: true
+dist: trusty
 sudo: false
 env:
   global:
