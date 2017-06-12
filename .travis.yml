@@ -2,16 +2,21 @@ language: ruby
 rvm:
   - 2.2.7
   - 2.3.4
+  - 2.4.1
 gemfile:
   - gemfiles/rails_4.1.gemfile
   - gemfiles/rails_4.2.gemfile
   - gemfiles/rails_5.0.gemfile
   - gemfiles/rails_5.1.gemfile
+matrix:
+  exclude:
+    - rvm: 2.4.1
+      gemfile: gemfiles/rails_4.1.gemfile
 script:
   - bundle exec rspec spec
 before_script:
   - cp spec/dummy/config/database.yml.ci spec/dummy/config/database.yml
-  - RAILS_ENV=test bundle exec rake app:db:drop app:db:create app:db:migrate
+  - RAILS_ENV=test bundle exec rake app:db:create app:db:migrate
 after_script:
   - bundle exec codeclimate-test-reporter
 env:
