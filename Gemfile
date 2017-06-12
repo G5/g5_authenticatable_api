@@ -9,15 +9,15 @@ gemspec
 
 # Gems used by the dummy application
 gem 'devise'
-gem 'devise_g5_authenticatable'
+# gem 'devise_g5_authenticatable'
 gem 'grape'
 gem 'jquery-rails'
 gem 'pg'
-gem 'rails', '4.2.8'
+gem 'rails', '5.0.3'
 
 group :test, :development do
   gem 'appraisal'
-  gem 'pry'
+  gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.6'
 end
 
@@ -26,7 +26,6 @@ group :test do
   gem 'codeclimate-test-reporter', '~> 1.0'
   gem 'factory_girl_rails', '~> 4.3', require: false
   gem 'rack-test'
-  gem 'rspec-http', require: false
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', require: false
   gem 'webmock'
@@ -37,6 +36,9 @@ end
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 # gem 'g5_authentication_client', github: 'G5/g5_authentication_client'
-
-# To use debugger
-# gem 'debugger'
+gem 'devise_g5_authenticatable', github: 'G5/devise_g5_authenticatable',
+                                 branch: 'rails5'
+gem 'g5_authentication_client', github: 'G5/g5_authentication_client',
+                                branch: 'rails5'
+gem 'modelish', github: 'maeve/modelish',
+                branch: 'dependency_upgrades'

@@ -19,11 +19,11 @@ RSpec.shared_examples_for 'a token authenticatable api' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header without details' do
-      expect(response.headers).to include('WWW-Authenticate' => 'Bearer')
+      expect(response.headers['WWW-Authenticate']).to eq('Bearer')
     end
   end
 
@@ -41,11 +41,11 @@ RSpec.shared_examples_for 'a token authenticatable api' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header without details' do
-      expect(response.headers).to include('WWW-Authenticate' => 'Bearer')
+      expect(response.headers['WWW-Authenticate']).to eq('Bearer')
     end
   end
 end

@@ -53,7 +53,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
 
       it 'does not set the authenticate response header' do
         authenticate_api_user!
-        expect(response).to_not have_header('WWW-Authenticate')
+        expect(response.headers).to_not have_key('WWW-Authenticate')
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
 
       it 'is unauthorized' do
         authenticate_api_user!
-        expect(response).to be_unauthorized
+        expect(response.status).to eq(401)
       end
 
       it 'renders an error message' do

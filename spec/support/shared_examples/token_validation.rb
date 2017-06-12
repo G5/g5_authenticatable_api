@@ -23,7 +23,7 @@ RSpec.shared_examples_for 'token validation' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header' do
@@ -47,7 +47,7 @@ RSpec.shared_examples_for 'token validation' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header' do

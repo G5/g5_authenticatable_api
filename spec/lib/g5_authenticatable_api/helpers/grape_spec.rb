@@ -64,12 +64,12 @@ RSpec.describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'is successful' do
         authenticate_user!
-        expect(last_response).to be_http_ok
+        expect(last_response.status).to eq(200)
       end
 
       it 'does not set the authenticate response header' do
         authenticate_user!
-        expect(last_response).to_not have_header('WWW-Authenticate')
+        expect(last_response.headers).to_not have_key('WWW-Authenticate')
       end
     end
 
@@ -79,7 +79,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'is unauthorized' do
         authenticate_user!
-        expect(last_response).to be_http_unauthorized
+        expect(last_response.status).to eq(401)
       end
 
       it 'renders an error message' do
@@ -89,7 +89,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'sets the authenticate response header' do
         authenticate_user!
-        expect(last_response).to have_header(
+        expect(last_response.headers).to include(
           'WWW-Authenticate' => auth_response_header
         )
       end
@@ -98,7 +98,6 @@ RSpec.describe G5AuthenticatableApi::Helpers::Grape do
 
   describe '#token_data' do
     subject(:token_data) { get '/token_data', params, env }
-
     before do
       allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new)
         .and_return(token_info)
