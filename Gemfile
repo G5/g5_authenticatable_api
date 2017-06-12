@@ -40,5 +40,5 @@ gem 'devise_g5_authenticatable', github: 'G5/devise_g5_authenticatable',
                                  branch: 'rails5'
 gem 'g5_authentication_client', github: 'G5/g5_authentication_client',
                                 branch: 'rails5'
-gem 'modelish', github: 'maeve/modelish',
+gem 'modelish', github: 'G5/modelish',
                 branch: 'dependency_upgrades'

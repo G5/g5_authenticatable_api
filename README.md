@@ -9,14 +9,15 @@ service using token-based authentication.
 
 ## Current Version
 
-0.4.0
+1.0.0.pre.1
 
 ## Requirements
 
-* [rails](http://rubyonrails.org/) >= 3.2
+* ruby >= 2.2
 
-**OR**
+At least one of:
 
+* [rails](http://rubyonrails.org/) >= 4.1
 * [grape](https://github.com/intridea/grape)
 
 ## Installation
