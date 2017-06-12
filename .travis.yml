@@ -12,6 +12,8 @@ matrix:
   exclude:
     - rvm: 2.4.1
       gemfile: gemfiles/rails_4.1.gemfile
+  allow_failures:
+    - rvm: 2.4.1
 cache:
   bundler: true
 sudo: false

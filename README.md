@@ -13,7 +13,7 @@ service using token-based authentication.
 
 ## Requirements
 
-* ruby >= 2.2
+* ruby >= 2.2 (support for ruby 2.4 is still experimental)
 
 At least one of:
 
