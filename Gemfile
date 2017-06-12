@@ -13,7 +13,7 @@ gem 'devise'
 gem 'grape'
 gem 'jquery-rails'
 gem 'pg'
-gem 'rails', '5.0.3'
+gem 'rails', '5.1.1'
 
 group :test, :development do
   gem 'appraisal'

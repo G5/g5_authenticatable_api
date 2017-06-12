@@ -8,16 +8,14 @@ RSpec.describe 'a secure Grape API endpoint' do
   let(:headers) {}
 
   describe 'GET request' do
-    subject(:api_call) { get endpoint, *build_request_options(params, headers) }
+    subject(:api_call) { safe_get endpoint, params, headers }
 
     it_should_behave_like 'a warden authenticatable api'
     it_should_behave_like 'a token authenticatable api'
   end
 
   describe 'POST request' do
-    subject(:api_call) do
-      post endpoint, *build_request_options(params, headers)
-    end
+    subject(:api_call) { safe_post endpoint, params, headers }
 
     it_should_behave_like 'a warden authenticatable api'
     it_should_behave_like 'a token authenticatable api'

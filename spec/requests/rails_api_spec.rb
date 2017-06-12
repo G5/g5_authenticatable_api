@@ -7,9 +7,7 @@ RSpec.describe 'A Secure Rails API endpoint' do
   let(:headers) {}
 
   describe 'GET request' do
-    subject(:api_call) do
-      get '/rails_api/articles', *build_request_options(params, headers)
-    end
+    subject(:api_call) { safe_get '/rails_api/articles', params, headers }
 
     it_should_behave_like 'a warden authenticatable api'
     it_should_behave_like 'a token authenticatable api'

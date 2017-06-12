@@ -1,17 +1,26 @@
 # frozen_string_literal: true
 
 module ControllerTestHelpers
-  def build_request_options(params = nil, headers = {})
-    params = headers unless params
+  def safe_get(endpoint, params = nil, headers = nil)
+    safe_request(:get, endpoint, params, headers)
+  end
 
+  def safe_post(endpoint, params = nil, headers = nil)
+    safe_request(:post, endpoint, params, headers)
+  end
+
+  def safe_request(method_name, endpoint, params = nil, headers = nil)
     if Rails.version.starts_with?('4')
-      [params, headers]
+      send(method_name, endpoint, params, headers)
     else
-      [{ params: params, headers: headers }]
+      options = { params: params }
+      options[:headers] = headers if headers
+      send(method_name, endpoint, **options)
     end
   end
 end
 
 RSpec.configure do |config|
-  config.include ControllerTestHelpers
+  config.include ControllerTestHelpers, type: :controller
+  config.include ControllerTestHelpers, type: :request
 end

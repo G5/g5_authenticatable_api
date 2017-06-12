@@ -19,9 +19,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
   before { request.env['warden'] = warden }
 
   describe '#authenticate_api_user!' do
-    subject(:authenticate_api_user!) do
-      get :index, *build_request_options(access_token: token_value)
-    end
+    subject(:authenticate_api_user!) { safe_get :index, access_token: token_value }
 
     let(:token_value) { 'abc123' }
 
@@ -85,7 +83,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     let(:token_info) { double(:user_fetcher, token_data: mock_token_data) }
     let(:mock_token_data) { double(:token_info) }
 
-    before { get :new, *build_request_options(access_token: 'abc123') }
+    before { safe_get :new, access_token: 'abc123' }
 
     it 'initializes the token info service correctly' do
       token_data
@@ -111,7 +109,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     let(:token_info) { double(:token_info, access_token: token_value) }
     let(:token_value) { 'abc123' }
 
-    before { get :new, *build_request_options(access_token: token_value) }
+    before { safe_get :new, access_token: token_value }
 
     it 'initializes the token info service correctly' do
       access_token
@@ -137,7 +135,7 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
     let(:user_fetcher) { double(:user_fetcher, current_user: user) }
     let(:user) { double(:user) }
 
-    before { get :new, *build_request_options(access_token: 'abc123') }
+    before { safe_get :new, access_token: 'abc123' }
 
     it 'initializes the user fetcher service correctly' do
       current_api_user
