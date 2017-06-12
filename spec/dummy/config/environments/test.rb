@@ -15,13 +15,22 @@ Dummy::Application.configure do
   config.eager_load = false
 
   # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files=)
-    config.serve_static_files = true
-  else
-    config.serve_static_assets = true
-  end
+  cache_header_value = 'public, max-age=3600'
 
-  config.static_cache_control = 'public, max-age=3600'
+  if config.respond_to?(:public_file_server)
+    config.public_file_server.enabled = true
+    config.public_file_server.headers = {
+      'Cache-Control' => cache_header_value
+    }
+  else
+    config.static_cache_control = cache_header_value
+
+    if config.respond_to?(:serve_static_files=)
+      config.serve_static_files = true
+    else
+      config.serve_static_assets = true
+    end
+  end
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
