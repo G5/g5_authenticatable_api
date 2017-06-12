@@ -19,7 +19,9 @@ RSpec.describe G5AuthenticatableApi::Helpers::Rails, type: :controller do
   before { request.env['warden'] = warden }
 
   describe '#authenticate_api_user!' do
-    subject(:authenticate_api_user!) { safe_get :index, access_token: token_value }
+    subject(:authenticate_api_user!) do
+      safe_get :index, access_token: token_value
+    end
 
     let(:token_value) { 'abc123' }
 
