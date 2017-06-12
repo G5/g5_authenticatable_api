@@ -12,6 +12,8 @@ matrix:
   exclude:
     - rvm: 2.4.1
       gemfile: gemfiles/rails_4.1.gemfile
+cache:
+  bundler: true
 script:
   - bundle exec rspec spec
 before_script:
