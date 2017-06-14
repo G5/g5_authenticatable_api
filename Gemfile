@@ -9,7 +9,7 @@ gemspec
 
 # Gems used by the dummy application
 gem 'devise'
-# gem 'devise_g5_authenticatable'
+gem 'devise_g5_authenticatable', '1.0.0.pre.1'
 gem 'grape'
 gem 'jquery-rails'
 gem 'pg'
@@ -36,5 +36,3 @@ end
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 # gem 'g5_authentication_client', github: 'G5/g5_authentication_client'
-gem 'devise_g5_authenticatable', github: 'G5/devise_g5_authenticatable',
-                                 branch: 'rails5'
