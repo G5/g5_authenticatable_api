@@ -19,6 +19,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rack'
-  spec.add_dependency 'g5_authentication_client', '1.0.0.pre.3'
+  spec.add_dependency 'g5_authentication_client', '1.0.0.pre.4'
   spec.add_dependency 'activesupport', '>= 3.2'
 end
