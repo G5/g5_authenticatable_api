@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 require 'g5_authenticatable_api/services/token_validator'
 require 'g5_authenticatable_api/services/user_fetcher'
 
 module G5AuthenticatableApi
   module Helpers
+    # Helpers for rails API controllers
     module Rails
       def authenticate_api_user!
-        raise_auth_error if !token_validator.valid?
+        raise_auth_error unless token_validator.valid?
       end
 
       def token_data
@@ -25,21 +28,35 @@ module G5AuthenticatableApi
       end
 
       private
+
       def token_info
-        @token_info ||= Services::TokenInfo.new(request.params, request.headers, warden)
+        @token_info ||= Services::TokenInfo.new(
+          request.params,
+          request.headers,
+          warden
+        )
       end
 
       def token_validator
-        @token_validator ||= Services::TokenValidator.new(request.params, request.headers, warden)
+        @token_validator ||= Services::TokenValidator.new(
+          request.params,
+          request.headers,
+          warden
+        )
       end
 
       def user_fetcher
-        @user_fetcher ||= Services::UserFetcher.new(request.params, request.headers, warden)
+        @user_fetcher ||= Services::UserFetcher.new(
+          request.params,
+          request.headers,
+          warden
+        )
       end
 
       def raise_auth_error
-        response.headers['WWW-Authenticate'] = token_validator.auth_response_header
-        render json: {error: 'Unauthorized'},
+        auth_header = token_validator.auth_response_header
+        response.headers['WWW-Authenticate'] = auth_header
+        render json: { error: 'Unauthorized' },
                status: :unauthorized
       end
     end

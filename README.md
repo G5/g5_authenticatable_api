@@ -9,14 +9,15 @@ service using token-based authentication.
 
 ## Current Version
 
-0.4.0
+1.0.0
 
 ## Requirements
 
-* [rails](http://rubyonrails.org/) >= 3.2
+* ruby >= 2.2
 
-**OR**
+At least one of:
 
+* [rails](http://rubyonrails.org/) >= 4.1
 * [grape](https://github.com/intridea/grape)
 
 ## Installation
@@ -86,7 +87,7 @@ To require authentication for all API actions:
 
 ```ruby
 class MyResourceController < ApplicationController
-  before_filter :authenticate_api_user!
+  before_action :authenticate_api_user!
 
   respond_to :json
 
@@ -98,7 +99,7 @@ To require authentication for some API actions:
 
 ```ruby
 class MyResourceController < ApplicationController
-  before_filter :authenticate_api_user!, only: [:create, :update]
+  before_action :authenticate_api_user!, only: [:create, :update]
 
   respond_to :json
 
@@ -112,7 +113,7 @@ using the `token_data` helper:
 
 ```ruby
 class MyResourceController < ApplicationController
-  before_filter :authenticate_api_user!
+  before_action :authenticate_api_user!
 
   respond_to :json
 
@@ -130,7 +131,7 @@ a [`G5AuthenticationClient::User`](https://github.com/G5/g5_authentication_clien
 
 ```ruby
 class MyResourceController < ApplicationController
-  before_filter :authenticate_api_user!
+  before_action :authenticate_api_user!
 
   respond_to :json
 
@@ -147,7 +148,7 @@ by using the `access_token` helper:
 
 ```ruby
 class MyResourceController < ApplicationController
-  before_filter :authenticate_api_user!
+  before_action :authenticate_api_user!
 
   respond_to :json
 
@@ -306,7 +307,7 @@ application:
 
 ```ruby
 class WelcomeController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def index
   end
@@ -333,7 +334,7 @@ Protect your API actions in your controller:
 
 ```ruby
 class Api::MyResourcesController < ApplicationController
-  before_filter :authenticate_api_user!
+  before_action :authenticate_api_user!
 
   respond_to :json
 

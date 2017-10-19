@@ -1,4 +1,6 @@
+# frozen_string_literal: true
 # coding: utf-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'g5_authenticatable_api/version'
@@ -19,6 +21,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rack'
-  spec.add_dependency 'g5_authentication_client', '~> 0.5'
+  spec.add_dependency 'g5_authentication_client', '~> 1.0'
   spec.add_dependency 'activesupport', '>= 3.2'
 end

@@ -1,49 +1,52 @@
+# frozen_string_literal: true
+
 require 'g5_authenticatable_api/services/token_info'
 
 module G5AuthenticatableApi
   module Services
+    # Validates an access token against the G5 Auth server
     class TokenValidator < TokenInfo
       attr_reader :error
 
       def validate!
-        begin
-          token_data unless skip_validation?
-        rescue StandardError => @error
-          raise error
-        end
+        token_data unless skip_validation?
+      rescue StandardError => @error
+        raise error
       end
 
       def valid?
-        begin
-          validate!
-          true
-        rescue StandardError => e
-          false
-        end
+        validate!
+        true
+      rescue StandardError
+        false
       end
 
       def auth_response_header
-        if error
-          auth_header = "Bearer"
+        return unless error
 
-          if access_token
-            auth_header << " error=\"#{error_code}\""
-            auth_header << ",error_description=\"#{error_description}\"" if error_description
+        auth_header = String.new('Bearer')
+
+        if access_token
+          auth_header << " error=\"#{error_code}\""
+
+          if error_description.present?
+            auth_header << ",error_description=\"#{error_description}\""
           end
-
-          auth_header
         end
+
+        auth_header
       end
 
       private
+
       def error_code
         error_code = error.code if error.respond_to?(:code)
         error_code || 'invalid_request'
       end
 
       def error_description
-        error_description = error.description if error.respond_to?(:description)
-        error_description
+        return unless error.respond_to?(:description)
+        error.description
       end
 
       def skip_validation?

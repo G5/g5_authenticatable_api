@@ -1,9 +1,11 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe G5AuthenticatableApi::Helpers::Grape do
+require 'rails_helper'
+
+RSpec.describe G5AuthenticatableApi::Helpers::Grape do
   include Rack::Test::Methods
 
-  def app
+  let(:app) do
     Class.new(Grape::API) do
       helpers G5AuthenticatableApi::Helpers::Grape
 
@@ -26,13 +28,15 @@ describe G5AuthenticatableApi::Helpers::Grape do
     end
   end
 
-  let(:env) { {'warden' => warden} }
+  let(:env) { { 'warden' => warden } }
   let(:warden) { double(:warden) }
 
-  let(:params) { {'access_token' => token_value} }
+  let(:params) { { 'access_token' => token_value } }
   let(:token_value) { 'abc123' }
 
-  let(:headers) { {'Host'=>'example.org', 'Cookie'=>''} }
+  let(:headers) do
+    { 'Host' => 'example.org', 'Cookie' => '' }
+  end
 
   describe '#authenticate_user!' do
     subject(:authenticate_user!) { get '/authenticate', params, env }
@@ -43,8 +47,8 @@ describe G5AuthenticatableApi::Helpers::Grape do
                                access_token: token_value)
     end
     before do
-      allow(G5AuthenticatableApi::Services::TokenValidator).to receive(:new).
-        and_return(token_validator)
+      allow(G5AuthenticatableApi::Services::TokenValidator).to receive(:new)
+        .and_return(token_validator)
     end
 
     context 'when token is valid' do
@@ -53,18 +57,19 @@ describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'initializes the token validator correctly' do
         authenticate_user!
-        expect(G5AuthenticatableApi::Services::TokenValidator).to have_received(:new).
-          with(params, headers, warden)
+        expect(G5AuthenticatableApi::Services::TokenValidator)
+          .to have_received(:new)
+          .with(params, headers, warden)
       end
 
       it 'is successful' do
         authenticate_user!
-        expect(last_response).to be_http_ok
+        expect(last_response.status).to eq(200)
       end
 
       it 'does not set the authenticate response header' do
         authenticate_user!
-        expect(last_response).to_not have_header('WWW-Authenticate')
+        expect(last_response.headers).to_not have_key('WWW-Authenticate')
       end
     end
 
@@ -74,7 +79,7 @@ describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'is unauthorized' do
         authenticate_user!
-        expect(last_response).to be_http_unauthorized
+        expect(last_response.status).to eq(401)
       end
 
       it 'renders an error message' do
@@ -84,25 +89,28 @@ describe G5AuthenticatableApi::Helpers::Grape do
 
       it 'sets the authenticate response header' do
         authenticate_user!
-        expect(last_response).to have_header('WWW-Authenticate' => auth_response_header)
+        expect(last_response.headers).to include(
+          'WWW-Authenticate' => auth_response_header
+        )
       end
     end
   end
 
   describe '#token_data' do
     subject(:token_data) { get '/token_data', params, env }
-
     before do
-      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
-        and_return(token_info)
+      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new)
+        .and_return(token_info)
     end
     let(:token_info) { double(:token_info, token_data: mock_token_data) }
-    let(:mock_token_data) { double(:token_data, to_json: '{result: mock_token_data_json}') }
+    let(:mock_token_data) do
+      double(:token_data, to_json: '{result: mock_token_data_json}')
+    end
 
     it 'initializes the token info service correctly' do
       token_data
-      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new).
-        with(params, headers, warden)
+      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new)
+        .with(params, headers, warden)
     end
 
     it 'returns the token info from the service' do
@@ -115,16 +123,16 @@ describe G5AuthenticatableApi::Helpers::Grape do
     subject(:current_user) { get '/current_user', params, env }
 
     before do
-      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new).
-        and_return(user_fetcher)
+      allow(G5AuthenticatableApi::Services::UserFetcher).to receive(:new)
+        .and_return(user_fetcher)
     end
     let(:user_fetcher) { double(:user_fetcher, current_user: user) }
     let(:user) { double(:user, to_json: '{result: mock_user_json}') }
 
     it 'initializes the user fetcher service correctly' do
       current_user
-      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new).
-        with(params, headers, warden)
+      expect(G5AuthenticatableApi::Services::UserFetcher).to have_received(:new)
+        .with(params, headers, warden)
     end
 
     it 'returns the user from the service' do
@@ -137,15 +145,15 @@ describe G5AuthenticatableApi::Helpers::Grape do
     subject(:access_token) { get '/access_token', params, env }
 
     before do
-      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new).
-        and_return(token_info)
+      allow(G5AuthenticatableApi::Services::TokenInfo).to receive(:new)
+        .and_return(token_info)
     end
     let(:token_info) { double(:token_info, access_token: token_value) }
 
     it 'initializes the token info service correctly' do
       access_token
-      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new).
-        with(params, headers, warden)
+      expect(G5AuthenticatableApi::Services::TokenInfo).to have_received(:new)
+        .with(params, headers, warden)
     end
 
     it 'returns the access token from the service' do

@@ -1,4 +1,6 @@
-shared_examples_for 'token validation' do
+# frozen_string_literal: true
+
+RSpec.shared_examples_for 'token validation' do
   context 'when token is valid' do
     include_context 'valid access token'
 
@@ -9,8 +11,9 @@ shared_examples_for 'token validation' do
     end
 
     it 'should validate the access token against the auth server' do
-      expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
-             with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
+      expect(a_request(:get, 'auth.g5search.com/oauth/token/info')
+        .with(headers: { 'Authorization' => "Bearer #{token_value}" }))
+        .to have_been_made
     end
   end
 
@@ -20,7 +23,7 @@ shared_examples_for 'token validation' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header' do
@@ -28,11 +31,13 @@ shared_examples_for 'token validation' do
     end
 
     it 'should return the authentication error' do
-      expect(response.headers['WWW-Authenticate']).to match("error=\"#{error_code}\"")
+      expect(response.headers['WWW-Authenticate'])
+        .to match("error=\"#{error_code}\"")
     end
 
     it 'should return the authentication error description' do
-      expect(response.headers['WWW-Authenticate']).to match("error_description=\"#{error_description}\"")
+      expect(response.headers['WWW-Authenticate'])
+        .to match("error_description=\"#{error_description}\"")
     end
   end
 
@@ -42,7 +47,7 @@ shared_examples_for 'token validation' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header' do
@@ -50,7 +55,8 @@ shared_examples_for 'token validation' do
     end
 
     it 'should return the default authentication error code' do
-      expect(response.headers['WWW-Authenticate']).to match('error="invalid_request"')
+      expect(response.headers['WWW-Authenticate'])
+        .to match('error="invalid_request"')
     end
   end
 end

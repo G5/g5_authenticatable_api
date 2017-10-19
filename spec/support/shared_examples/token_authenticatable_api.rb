@@ -1,14 +1,16 @@
-shared_examples_for 'a token authenticatable api' do
+# frozen_string_literal: true
+
+RSpec.shared_examples_for 'a token authenticatable api' do
   let(:token_value) { 'abc123' }
 
   context 'with authorization header' do
-    let(:headers) { {'Authorization' => "Bearer #{token_value}"} }
+    let(:headers) { { 'Authorization' => "Bearer #{token_value}" } }
 
     include_examples 'token validation'
   end
 
   context 'with access token parameter' do
-    let(:params) { {'access_token' => token_value} }
+    let(:params) { { 'access_token' => token_value } }
 
     include_examples 'token validation'
   end
@@ -17,11 +19,11 @@ shared_examples_for 'a token authenticatable api' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header without details' do
-      expect(response.headers).to include('WWW-Authenticate' => 'Bearer')
+      expect(response.headers['WWW-Authenticate']).to eq('Bearer')
     end
   end
 
@@ -39,11 +41,11 @@ shared_examples_for 'a token authenticatable api' do
     before { subject }
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header without details' do
-      expect(response.headers).to include('WWW-Authenticate' => 'Bearer')
+      expect(response.headers['WWW-Authenticate']).to eq('Bearer')
     end
   end
 end

@@ -1,6 +1,6 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-shared_examples_for 'a warden authenticatable api' do
+RSpec.shared_examples_for 'a warden authenticatable api' do
   context 'when user is authenticated' do
     let(:user) { create(:user) }
     let(:token_value) { user.g5_access_token }
@@ -27,23 +27,24 @@ shared_examples_for 'a warden authenticatable api' do
       end
 
       it 'should not validate the token against the auth server' do
-        expect(a_request(:get, 'auth.g5search.com/oauth/token/info')).to_not have_been_made
+        expect(a_request(:get, 'auth.g5search.com/oauth/token/info'))
+          .to_not have_been_made
       end
     end
   end
 
   context 'when user is not authenticated' do
     before do
-     logout
-     subject
+      logout
+      subject
     end
 
     it 'should be unauthorized' do
-      expect(response).to be_http_unauthorized
+      expect(response.status).to eq(401)
     end
 
     it 'should return an authenticate header without details' do
-      expect(response.headers).to include('WWW-Authenticate' => 'Bearer')
+      expect(response.headers['WWW-Authenticate']).to eq('Bearer')
     end
   end
 end

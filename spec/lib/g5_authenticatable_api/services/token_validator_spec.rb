@@ -1,12 +1,14 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe G5AuthenticatableApi::Services::TokenValidator do
+require 'rails_helper'
+
+RSpec.describe G5AuthenticatableApi::Services::TokenValidator do
   subject { validator }
 
   let(:validator) { described_class.new(params, headers, warden) }
 
   let(:headers) {}
-  let(:params) { {'access_token' => token_value} }
+  let(:params) { { 'access_token' => token_value } }
   let(:token_value) { 'abc123' }
   let(:warden) {}
 
@@ -19,8 +21,9 @@ describe G5AuthenticatableApi::Services::TokenValidator do
 
         it 'should initialize the auth client with the access token' do
           validate!
-          expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
-                 with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
+          expect(a_request(:get, 'auth.g5search.com/oauth/token/info')
+            .with(headers: { 'Authorization' => "Bearer #{token_value}" }))
+            .to have_been_made
         end
 
         it 'should not raise errors during validation' do
@@ -52,7 +55,9 @@ describe G5AuthenticatableApi::Services::TokenValidator do
 
     context 'when token is on the warden user' do
       let(:warden) { double(:warden, user: user) }
-      let(:user) { FactoryGirl.build_stubbed(:user, g5_access_token: token_value) }
+      let(:user) do
+        FactoryGirl.build_stubbed(:user, g5_access_token: token_value)
+      end
       let(:params) {}
       let(:headers) {}
 
@@ -64,8 +69,9 @@ describe G5AuthenticatableApi::Services::TokenValidator do
 
           it 'should validate the access token against the auth server' do
             validate!
-            expect(a_request(:get, 'auth.g5search.com/oauth/token/info').
-                  with(headers: {'Authorization' => "Bearer #{token_value}"})).to have_been_made
+            expect(a_request(:get, 'auth.g5search.com/oauth/token/info')
+              .with(headers: { 'Authorization' => "Bearer #{token_value}" }))
+              .to have_been_made
           end
 
           it 'should not raise errors during validation' do
@@ -87,7 +93,8 @@ describe G5AuthenticatableApi::Services::TokenValidator do
 
         it 'should not validate the access token against the auth server' do
           validate!
-          expect(a_request(:get, 'authg5search.com/oauth/token/info')).to_not have_been_made
+          expect(a_request(:get, 'authg5search.com/oauth/token/info'))
+            .to_not have_been_made
         end
 
         it 'should not raise errors during validation' do
@@ -138,7 +145,8 @@ describe G5AuthenticatableApi::Services::TokenValidator do
       end
 
       it 'should set an error on the validator' do
-        expect { valid? }.to change { validator.error }.from(nil).to(an_instance_of(OAuth2::Error))
+        expect { valid? }.to change { validator.error }
+          .from(nil).to(an_instance_of(OAuth2::Error))
       end
     end
 
@@ -151,8 +159,8 @@ describe G5AuthenticatableApi::Services::TokenValidator do
       end
 
       it 'should set an error on the validator' do
-        expect { valid? }.to change { validator.error }.
-          from(nil).to(an_instance_of(RuntimeError))
+        expect { valid? }.to change { validator.error }
+          .from(nil).to(an_instance_of(RuntimeError))
       end
     end
   end
