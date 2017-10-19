@@ -9,7 +9,7 @@ gemspec
 
 # Gems used by the dummy application
 gem 'devise'
-gem 'devise_g5_authenticatable', '1.0.0.pre.1'
+gem 'devise_g5_authenticatable', '1.0.0'
 gem 'grape'
 gem 'jquery-rails'
 gem 'pg'

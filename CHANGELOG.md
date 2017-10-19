@@ -1,10 +1,10 @@
-## v1.0.0.pre.1 (2017-06-12)
+## v1.0.0 (2017-10-19)
 
 * **Backwards incompatible changes**
   * Drop support for ruby < 2.2
   * Drop support for rails < 4.1
 * Enhancements
-  * Add support for ruby 2.3 and 2.4 (experimental)
+  * Add support for ruby 2.3 and 2.4
   * Add support for rails 5.0 and 5.1
 
 ## v0.4.0 (2015-05-22)

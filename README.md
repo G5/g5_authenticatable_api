@@ -9,11 +9,11 @@ service using token-based authentication.
 
 ## Current Version
 
-1.0.0.pre.1
+1.0.0
 
 ## Requirements
 
-* ruby >= 2.2 (support for ruby 2.4 is still experimental)
+* ruby >= 2.2
 
 At least one of:
 
