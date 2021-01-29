@@ -23,4 +23,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rack'
   spec.add_dependency 'activesupport', '>= 3.2'
+  spec.add_dependency 'configlet', '~> 2.1'
+  spec.add_dependency 'oauth2'
 end

@@ -27,3 +27,5 @@ RSpec.configure do |config|
 
   Kernel.srand config.seed
 end
+
+require 'g5_authenticatable_api'

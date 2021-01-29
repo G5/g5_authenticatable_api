@@ -4,10 +4,9 @@ require 'active_support'
 require 'active_support/core_ext/module/attribute_accessors'
 
 require 'g5_authenticatable_api/version'
+require 'g5_authenticatable_api/configuration'
 require 'g5_authenticatable_api/helpers/grape'
 require 'g5_authenticatable_api/railtie' if defined?(Rails)
-
-require 'g5_authentication_client'
 
 # Token-based authentication for protecting rails API endpoints with G5 Auth
 module G5AuthenticatableApi

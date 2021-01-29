@@ -18,6 +18,7 @@ gem 'rails', '5.1.1'
 group :test, :development do
   gem 'appraisal'
   gem 'pry-byebug'
+  gem 'rspec'
   gem 'rspec-rails', '~> 3.6'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
