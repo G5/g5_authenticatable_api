@@ -19,6 +19,9 @@ group :test, :development do
   gem 'appraisal'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.6'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do
