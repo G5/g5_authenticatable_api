@@ -5,6 +5,7 @@ require 'active_support/core_ext/module/attribute_accessors'
 
 require 'g5_authenticatable_api/version'
 require 'g5_authenticatable_api/configuration'
+require 'g5_authenticatable_api/error'
 require 'g5_authenticatable_api/helpers/grape'
 require 'g5_authenticatable_api/railtie' if defined?(Rails)
 
@@ -15,4 +16,6 @@ module G5AuthenticatableApi
   # an existing session in warden). Disabled by default.
   @@strict_token_validation = false
   mattr_accessor :strict_token_validation
+
+  extend Configuration
 end
